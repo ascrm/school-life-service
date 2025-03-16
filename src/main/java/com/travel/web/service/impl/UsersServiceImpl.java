@@ -3,8 +3,12 @@ package com.travel.web.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.travel.entity.Users;
+import com.travel.entity.UsersAuths;
+import com.travel.utils.RedisUtil;
 import com.travel.web.mapper.UsersMapper;
+import com.travel.web.service.UsersAuthsService;
 import com.travel.web.service.UsersService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -12,7 +16,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 用户表 服务层实现。
@@ -22,6 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements UsersService {
 
     @Value("${wechat.appid}")
@@ -30,10 +34,9 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     @Value("${wechat.secret}")
     private String secret;
 
-    private final RestTemplate restTemplate = new RestTemplate();
-    
-    // 模拟token存储，实际项目中应该使用Redis等缓存服务
-    private static final Map<String, Object> TOKEN_CACHE = new ConcurrentHashMap<>();
+    private final UsersAuthsService usersAuthsService;
+
+    private final RedisUtil redisUtil;
 
     @Override
     public String getWxOpenid(String code) {
@@ -44,9 +47,10 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
                 "&js_code=" + code +
                 "&grant_type=authorization_code";
 
+        RestTemplate restTemplate = new RestTemplate();
         var response = restTemplate.getForEntity(url, Map.class);
         var result = response.getBody();
-        
+
         if (result.containsKey("openid")) {
             return (String) result.get("openid");
         }
@@ -56,31 +60,26 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
 
     @Override
     public Users getUserByOpenid(String openid) {
-        // 根据openid查询用户信息
         LambdaQueryWrapper<Users> queryWrapper = new LambdaQueryWrapper<>();
-        // 假设在Users表中添加了openid字段，或者使用关联表存储
-        // 这里为了演示，使用username模拟查询openid
         queryWrapper.eq(Users::getUsername, "wx_" + openid.substring(0, 8))
                    .eq(Users::getIsDelete, 0);
-        
         return getOne(queryWrapper);
     }
 
     @Override
-    public boolean registerWxUser(Users user, String openid) {
-        // 实际项目中，应该将openid与用户ID的关系保存到关联表中
-        // 这里为了演示，直接使用username中包含openid的方式
-        return save(user);
+    public void registerWxUser(Users user, String openid) {
+        UsersAuths usersAuths = new UsersAuths();
+        usersAuths.setUserId(user.getId())
+                  .setIdentityType("wx")
+                  .setIdentifier(openid)
+                  .setCredential("");
+        usersAuthsService.save(usersAuths);
     }
 
     @Override
     public String generateToken(Users user) {
-        // 生成唯一token
         String token = UUID.randomUUID().toString().replace("-", "");
-        
-        // 将token与用户信息关联存储
-        TOKEN_CACHE.put(token, user.getId());
-        
+        redisUtil.setCacheObject(token, user.getId());
         return token;
     }
 
@@ -91,11 +90,11 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         }
         
         // 从缓存中获取用户ID
-        Object userId = TOKEN_CACHE.get(token);
-        
+        Integer userId = redisUtil.getCacheObject(token);
+
         if (userId != null) {
             // 查询用户信息
-            return getById((Integer) userId);
+            return getById(userId);
         }
         
         return null;

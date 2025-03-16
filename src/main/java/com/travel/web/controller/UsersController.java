@@ -3,9 +3,7 @@ package com.travel.web.controller;
 import com.travel.entity.Result;
 import com.travel.entity.Users;
 import com.travel.web.service.UsersService;
-import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -20,10 +18,10 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UsersController {
 
-    @Resource
-    private UsersService usersService;
+    private final UsersService usersService;
     
     /**
      * 微信小程序登录接口
@@ -47,7 +45,7 @@ public class UsersController {
             // 设置基础信息
             user.setUsername("wx_" + openid.substring(0, 8))  // 生成默认用户名
                 .setNickName(userInfo != null ? (String) userInfo.get("nickName") : "微信用户") // 设置昵称
-                .setAvatar(userInfo != null ? (String) userInfo.get("avatarUrl") : "") // 设置头像
+                .setAvatar(userInfo != null ? (String) userInfo.get("avatarUrl") : "默认头像") // 设置头像
                 .setStatus(1) // 正常状态
                 .setCreatedTime(LocalDateTime.now())
                 .setUpdatedTime(LocalDateTime.now())

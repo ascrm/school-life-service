@@ -31,11 +31,10 @@ public interface UsersService extends IService<Users> {
     /**
      * 注册微信用户
      *
-     * @param user 用户信息
+     * @param user   用户信息
      * @param openid 微信openid
-     * @return 注册结果
      */
-    boolean registerWxUser(Users user, String openid);
+    void registerWxUser(Users user, String openid);
 
     /**
      * 生成用户登录token
