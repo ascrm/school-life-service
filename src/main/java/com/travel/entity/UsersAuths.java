@@ -66,18 +66,6 @@ public class UsersAuths implements Serializable {
     private LocalDateTime updatedAt;
 
     /**
-     * 创建人
-     */
-    @TableField("created_by")
-    private String createdBy;
-
-    /**
-     * 更新人
-     */
-    @TableField("updated_by")
-    private String updatedBy;
-
-    /**
      * 版本号，乐观锁注解
      */
     @Version

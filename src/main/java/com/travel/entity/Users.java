@@ -57,18 +57,6 @@ public class Users {
     private String avatar;
 
     /**
-     * 真实姓名
-     */
-    @TableField(value = "real_name")
-    private String realName;
-
-    /**
-     * 身份证号
-     */
-    @TableField(value = "identity_id")
-    private String identityId;
-
-    /**
      * 电子邮件地址
      */
     @TableField(value = "email")
@@ -87,22 +75,10 @@ public class Users {
     private Integer status;
 
     /**
-     * 创建人
-     */
-    @TableField(value = "created_by")
-    private String createdBy;
-
-    /**
      * 创建时间
      */
     @TableField(value = "created_time")
     private LocalDateTime createdTime;
-
-    /**
-     * 更新人
-     */
-    @TableField(value = "updated_by")
-    private String updatedBy;
 
     /**
      * 更新时间

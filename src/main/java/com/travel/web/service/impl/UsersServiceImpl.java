@@ -1,5 +1,6 @@
 package com.travel.web.service.impl;
 
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.travel.entity.Users;
@@ -14,7 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Map;
+import java.util.HashMap;
 import java.util.UUID;
 
 /**
@@ -48,14 +49,14 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
                 "&grant_type=authorization_code";
 
         RestTemplate restTemplate = new RestTemplate();
-        var response = restTemplate.getForEntity(url, Map.class);
-        var result = response.getBody();
+        var response = restTemplate.getForEntity(url, String.class);
+        var result = JSON.parseObject(JSON.toJSONString(response.getBody()), HashMap.class);
 
         if (result.containsKey("openid")) {
             return (String) result.get("openid");
         }
         
-        throw new RuntimeException("获取微信openid失败: " + result.get("errMsg"));
+        throw new RuntimeException("获取微信openid失败: ");
     }
 
     @Override
@@ -68,6 +69,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
 
     @Override
     public void registerWxUser(Users user, String openid) {
+        save(user);
         UsersAuths usersAuths = new UsersAuths();
         usersAuths.setUserId(user.getId())
                   .setIdentityType("wx")

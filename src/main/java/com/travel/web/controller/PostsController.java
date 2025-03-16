@@ -1,9 +1,7 @@
 package com.travel.web.controller;
 
-import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.travel.web.service.PostsService;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -13,9 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since V1.0
  */
 @RestController
-@RequestMapping("/posts")
+@RequestMapping("/school/web")
+@RequiredArgsConstructor
 public class PostsController {
-
-    @Resource
-    private PostsService postsService;
 } 
