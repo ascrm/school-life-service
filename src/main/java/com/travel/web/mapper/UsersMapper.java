@@ -1,7 +1,7 @@
 package com.travel.web.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.travel.web.entity.Users;
+import com.travel.entity.Users;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

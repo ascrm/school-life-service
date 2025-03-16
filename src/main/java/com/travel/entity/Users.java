@@ -1,4 +1,4 @@
-package com.travel.admin.entity;
+package com.travel.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -14,7 +14,7 @@ import java.lang.Integer;
 import java.time.LocalDateTime;
 
 /**
- * 管理员表 实体类。
+ * 用户表 实体类。
  *
  * @author ascrm
  * @since V1.0
@@ -23,11 +23,11 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName(value = "tb_admins")
-public class Admins {
+@TableName(value = "tb_users")
+public class Users {
 
     /**
-     * 管理员ID
+     * 用户ID
      */
     @TableId(type = IdType.AUTO)
     private Integer id;
@@ -39,7 +39,7 @@ public class Admins {
     private String username;
 
     /**
-     * 密码（加密存储）
+     * 密码
      */
     @TableField(value = "password")
     private String password;
@@ -55,6 +55,36 @@ public class Admins {
      */
     @TableField(value = "avatar")
     private String avatar;
+
+    /**
+     * 真实姓名
+     */
+    @TableField(value = "real_name")
+    private String realName;
+
+    /**
+     * 身份证号
+     */
+    @TableField(value = "identity_id")
+    private String identityId;
+
+    /**
+     * 电子邮件地址
+     */
+    @TableField(value = "email")
+    private String email;
+
+    /**
+     * 手机号码
+     */
+    @TableField(value = "phone")
+    private String phone;
+
+    /**
+     * 状态(1 正常/2 异常)
+     */
+    @TableField(value = "status")
+    private Integer status;
 
     /**
      * 创建人
