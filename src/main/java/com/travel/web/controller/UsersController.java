@@ -8,8 +8,6 @@ import com.travel.web.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 import static com.travel.common.content.AuthContent.*;
 
 /**
@@ -44,7 +42,6 @@ public class UsersController {
             user = new Users();
             user.setUsername(DEFAULT_USERNAME_PREFIX + openid.substring(0, 8))
                 .setPassword(SaSecureUtil.md5(DEFAULT_PASSWORD))
-//                    .setPassword(DEFAULT_PASSWORD)
                 .setNickName(userInfo != null ? userInfo.getNickName() : DEFAULT_NICKNAME)
                 .setAvatar(DEFAULT_AVATAR);
             

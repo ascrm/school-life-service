@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.travel.entity.Users;
 import com.travel.entity.UsersAuths;
 import com.travel.enums.IdentifyType;
-import com.travel.utils.RedisUtil;
 import com.travel.web.mapper.UsersAuthsMapper;
 import com.travel.web.mapper.UsersMapper;
 import com.travel.web.service.UsersService;
@@ -36,8 +35,6 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     private String secret;
 
     private final UsersAuthsMapper usersAuthsMapper;
-
-    private final RedisUtil redisUtil;
 
     @Override
     public String getWxOpenid(String code) {
