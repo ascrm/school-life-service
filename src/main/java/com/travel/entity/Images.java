@@ -11,7 +11,7 @@ import java.lang.Integer;
 import java.time.LocalDateTime;
 
 /**
- * 帖子信息表 实体类。
+ * 图片信息表 实体类。
  *
  * @author ascrm
  * @since V1.0
@@ -20,32 +20,32 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName(value = "tb_posts")
-public class Posts {
+@TableName(value = "tb_images")
+public class Images {
 
     /**
-     * 帖子ID
+     * 图片ID
      */
     @TableId(type = IdType.AUTO)
     private Integer id;
 
     /**
-     * 用户ID，外键关联Users表
+     * 帖子ID，外键关联Posts表
      */
-    @TableField(value = "user_id")
-    private Integer userId;
+    @TableField(value = "post_id")
+    private Integer postId;
 
     /**
-     * 标题
+     * 图片URL
      */
-    @TableField(value = "title")
-    private String title;
+    @TableField(value = "image_url")
+    private String imageUrl;
 
     /**
-     * 内容描述
+     * 上传时间
      */
-    @TableField(value = "content")
-    private String content;
+    @TableField(value = "uploaded_at")
+    private LocalDateTime uploadedAt;
 
     /**
      * 创建时间
@@ -82,4 +82,4 @@ public class Posts {
      */
     @TableField(value = "is_delete", fill = FieldFill.INSERT)
     private Integer isDelete;
-} 
+}

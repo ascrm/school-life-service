@@ -6,12 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.lang.String;
 import java.lang.Integer;
 import java.time.LocalDateTime;
 
 /**
- * 帖子信息表 实体类。
+ * 帖子与标签关系表 实体类。
  *
  * @author ascrm
  * @since V1.0
@@ -20,32 +19,26 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName(value = "tb_posts")
-public class Posts {
+@TableName(value = "tb_posts_tags")
+public class PostsTags {
 
     /**
-     * 帖子ID
+     * 帖子ID，外键关联Posts表
      */
     @TableId(type = IdType.AUTO)
     private Integer id;
 
     /**
-     * 用户ID，外键关联Users表
+     * 帖子ID，外键关联Posts表
      */
-    @TableField(value = "user_id")
-    private Integer userId;
+    @TableField(value="post_id")
+    private Integer postId;
 
     /**
-     * 标题
+     * 标签ID，外键关联Tags表
      */
-    @TableField(value = "title")
-    private String title;
-
-    /**
-     * 内容描述
-     */
-    @TableField(value = "content")
-    private String content;
+    @TableField(value="tag_id")
+    private Integer tagId;
 
     /**
      * 创建时间
@@ -82,4 +75,4 @@ public class Posts {
      */
     @TableField(value = "is_delete", fill = FieldFill.INSERT)
     private Integer isDelete;
-} 
+}

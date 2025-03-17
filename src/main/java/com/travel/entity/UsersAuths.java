@@ -69,13 +69,13 @@ public class UsersAuths implements Serializable {
      * 版本号，乐观锁注解
      */
     @Version
-    @TableField("version")
+    @TableField(value = "version", fill = FieldFill.INSERT)
     private Integer version;
 
     /**
      * 是否删除，逻辑删除注解
      */
     @TableLogic
-    @TableField("is_delete")
+    @TableField(value = "is_delete", fill = FieldFill.INSERT)
     private Integer isDelete;
 }

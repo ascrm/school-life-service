@@ -146,30 +146,6 @@ public class MinioUtils {
         );
     }
 
-
-    /**
-     * @Title: uploadFile
-     * @Description: (获取上传文件信息上传文件)
-     * [file 上传文件（MultipartFile）, bucketName 桶名]
-     */
-    public Result<String> uploadFile(MultipartFile file, String bucketName) throws Exception {
-        //判断文件是否为空
-        if (null == file || 0 == file.getSize()) {
-           return Result.fail("上传失败");
-        }
-        //判断存储桶是否存在,不存在则创建
-        createBucket(bucketName);
-        //文件名
-        String originalFilename = file.getOriginalFilename();
-        //新的文件名 = 存储桶文件名_时间戳.后缀名
-        String fileName = bucketName + "_" +
-                System.currentTimeMillis() +
-                originalFilename.substring(originalFilename.lastIndexOf("."));
-        //开始上传
-        putObject(bucketName, fileName, file.getInputStream());
-        return Result.success( bucketName + "/" + fileName);
-    }
-
     /**
      * @Title: getAllBuckets
      * @Description: (获取全部bucket)

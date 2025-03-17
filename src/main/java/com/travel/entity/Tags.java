@@ -11,7 +11,7 @@ import java.lang.Integer;
 import java.time.LocalDateTime;
 
 /**
- * 帖子信息表 实体类。
+ * 标签信息表 实体类。
  *
  * @author ascrm
  * @since V1.0
@@ -20,32 +20,20 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName(value = "tb_posts")
-public class Posts {
+@TableName(value = "tb_tags")
+public class Tags {
 
     /**
-     * 帖子ID
+     * 标签ID
      */
     @TableId(type = IdType.AUTO)
     private Integer id;
 
     /**
-     * 用户ID，外键关联Users表
+     * 标签名
      */
-    @TableField(value = "user_id")
-    private Integer userId;
-
-    /**
-     * 标题
-     */
-    @TableField(value = "title")
-    private String title;
-
-    /**
-     * 内容描述
-     */
-    @TableField(value = "content")
-    private String content;
+    @TableField(value = "name")
+    private String name;
 
     /**
      * 创建时间
@@ -82,4 +70,4 @@ public class Posts {
      */
     @TableField(value = "is_delete", fill = FieldFill.INSERT)
     private Integer isDelete;
-} 
+}
