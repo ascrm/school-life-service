@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.travel.entity.Image;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
 /**
  * 图片信息表 服务层。
  *
@@ -13,7 +11,6 @@ import java.util.List;
  * @since V1.0
  */
 public interface ImageService extends IService<Image> {
-    Image uploadImage(MultipartFile file);
 
-    List<Image> uploadImage(List<MultipartFile> files);
+    String uploadImage(MultipartFile file);
 }

@@ -11,8 +11,6 @@ import com.travel.web.mapper.ImageMapper;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 图片信息表 服务层实现。
@@ -30,7 +28,7 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     private String bucketName;
 
     @Override
-    public Image uploadImage(MultipartFile file) {
+    public String uploadImage(MultipartFile file) {
         //判断文件是否为空
         if (null == file || 0 == file.getSize()) return null;
         //判断存储桶是否存在,不存在则创建
@@ -48,18 +46,6 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
             log.error("文件上传失败",e);
             return null;
         }
-        Image image = new Image();
-        return image.setImageUrl(minioUtils.getObjectUrl(bucketName, fileName, 7));
-    }
-
-    @Override
-    public List<Image> uploadImage(List<MultipartFile> files) {
-        List<Image> imageList= new ArrayList<>();
-        for (MultipartFile file : files) {
-            Image image = uploadImage(file);
-            if(image ==null) return null;
-            imageList.add(image);
-        }
-        return imageList;
+        return minioUtils.getObjectUrl(bucketName, fileName, 7);
     }
 }
