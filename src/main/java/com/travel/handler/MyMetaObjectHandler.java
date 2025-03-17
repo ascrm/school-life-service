@@ -14,8 +14,8 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
         this.strictInsertFill(metaObject, "createdAt", LocalDateTime.class, LocalDateTime.now());
         this.strictInsertFill(metaObject, "updatedAt", LocalDateTime.class, LocalDateTime.now());
-        this.strictInsertFill(metaObject, "createdBy", String.class, UserHolder.getUsername());
-        this.strictInsertFill(metaObject, "updatedBy", String.class, UserHolder.getUsername());
+        this.strictInsertFill(metaObject, "createdBy", String.class, UserHolder.getLoginId());
+        this.strictInsertFill(metaObject, "updatedBy", String.class, UserHolder.getLoginId());
         this.strictInsertFill(metaObject, "version", Integer.class, 1);
         this.strictInsertFill(metaObject, "isDelete", Integer.class,0);
     }
@@ -23,6 +23,6 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void updateFill(MetaObject metaObject) {
         this.strictUpdateFill(metaObject, "updatedAt", LocalDateTime.class, LocalDateTime.now());
-        this.strictUpdateFill(metaObject, "updatedBy", String.class, UserHolder.getUsername());
+        this.strictUpdateFill(metaObject, "updatedBy", String.class, UserHolder.getLoginId());
     }
 }

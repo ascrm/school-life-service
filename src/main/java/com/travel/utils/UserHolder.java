@@ -29,7 +29,7 @@ public class UserHolder {
     }  
     
     //单独设置的一个获取loginId的方法，其实和get方法一样，只是为了方便  
-    public static String getUsername(){
+    public static String getLoginId(){
         return (String) getThreadLocalMap().get(USER_HOLDER_KEY);
     } 
     

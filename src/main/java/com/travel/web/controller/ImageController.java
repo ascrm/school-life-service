@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since V1.0
  */
 @RestController
-@RequestMapping("/images")
+@RequestMapping("/school/web")
 @RequiredArgsConstructor
 public class ImageController {
 

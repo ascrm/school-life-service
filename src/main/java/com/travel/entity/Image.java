@@ -63,13 +63,13 @@ public class Image {
      * 创建人ID
      */
     @TableField(value = "created_by", fill = FieldFill.INSERT)
-    private Integer createdBy;
+    private String createdBy;
 
     /**
      * 最后更新人ID
      */
     @TableField(value = "updated_by", fill = FieldFill.INSERT_UPDATE)
-    private Integer updatedBy;
+    private String updatedBy;
 
     /**
      * 版本号

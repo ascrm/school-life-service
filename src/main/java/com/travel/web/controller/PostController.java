@@ -7,7 +7,9 @@ import com.travel.converter.PostConverter;
 import com.travel.entity.Image;
 import com.travel.entity.Post;
 import com.travel.entity.PostTag;
+import com.travel.entity.User;
 import com.travel.entity.dto.PostDto;
+import com.travel.utils.UserHolder;
 import com.travel.web.service.ImageService;
 import com.travel.web.service.PostService;
 import com.travel.web.service.PostTagService;
@@ -49,8 +51,6 @@ public class PostController {
 
     public Result<String> publishPost(@RequestPart("files") MultipartFile files,
                                       @RequestParam String postsDtoStr) {
-        log.info("接口参数1：{}",files);
-        log.info("接口参数2：{}",postsDtoStr);
         ObjectMapper objectMapper=new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         PostDto postDto = objectMapper.readValue(postsDtoStr, PostDto.class);
@@ -63,8 +63,8 @@ public class PostController {
         if(image ==null) return Result.fail("图片上传失败");
 
         //先保存帖子信息到数据库
-
-        postService.save(post);
+        User user = userService.getUserByOpenid(UserHolder.getLoginId());
+        postService.save(post.setUserId(user.getId()));
 
         //保存图片信息到数据库
 //        image.forEach(image->{
@@ -74,13 +74,17 @@ public class PostController {
         imageService.save(image.setPostId(post.getId()));
 
         //建立帖子和标签的关系
-        List<PostTag> list=new ArrayList<>();
-        postDto.getTagIds().forEach(tagId->{
-            PostTag postTag = new PostTag();
-            postTag.setTagId(tagId).setPostId(post.getId());
-            list.add(postTag);
-        });
-        postTagService.saveBatch(list);
+        if(postDto.getTagIds()!=null){
+            List<PostTag> list=new ArrayList<>();
+            String[] tagIds = postDto.getTagIds().split(",");
+            for (String tagId : tagIds) {
+                PostTag postTag = new PostTag();
+                postTag.setTagId(Integer.valueOf(tagId)).setPostId(post.getId());
+                list.add(postTag);
+            }
+            postTagService.saveBatch(list);
+        }
+
         return Result.success("发布成功");
     }
 } 
