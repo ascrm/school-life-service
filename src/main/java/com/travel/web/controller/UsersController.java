@@ -8,6 +8,8 @@ import com.travel.web.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 import static com.travel.common.content.AuthContent.*;
 
 /**
@@ -32,7 +34,7 @@ public class UsersController {
      */
     @PostMapping("/user/wx/login")
     public Result<String> wxLogin(@RequestParam String code,
-                                               @RequestBody(required = false) Users userInfo) {
+                                  @RequestBody(required = false) Users userInfo) {
         // 1. 通过code获取微信用户的openid和session_key
         String openid = usersService.getWxOpenid(code);
         // 2. 根据openid查询用户是否已存在
@@ -42,6 +44,7 @@ public class UsersController {
             user = new Users();
             user.setUsername(DEFAULT_USERNAME_PREFIX + openid.substring(0, 8))
                 .setPassword(SaSecureUtil.md5(DEFAULT_PASSWORD))
+//                    .setPassword(DEFAULT_PASSWORD)
                 .setNickName(userInfo != null ? userInfo.getNickName() : DEFAULT_NICKNAME)
                 .setAvatar(DEFAULT_AVATAR);
             

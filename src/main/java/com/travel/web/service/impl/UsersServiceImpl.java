@@ -63,6 +63,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     public Users getUserByOpenid(String openid) {
         UsersAuths usersAuths = usersAuthsMapper.selectOne(new LambdaQueryWrapper<UsersAuths>()
                 .eq(UsersAuths::getIdentifier, openid));
+        if(usersAuths == null) return null;
         return getById(usersAuths.getUserId());
     }
 
