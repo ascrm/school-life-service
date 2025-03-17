@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.travel.common.content.AuthContent.USER_HOLDER_KEY;
+
 public class UserHolder {
     //创建一个ThreadLocal，其中存的是map类型的数据  
     private static final InheritableThreadLocal<Map<String, Object>> THREAD_LOCAL
@@ -28,7 +30,7 @@ public class UserHolder {
     
     //单独设置的一个获取loginId的方法，其实和get方法一样，只是为了方便  
     public static String getUsername(){
-        return (String) getThreadLocalMap().get("username");
+        return (String) getThreadLocalMap().get(USER_HOLDER_KEY);
     } 
     
     //获取ThreadLocal中的map，若map为空，则创建一个；若不为空，则使用之前的那个  

@@ -1,11 +1,14 @@
 package com.travel.web.controller;
 
+import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
-import com.travel.entity.Result;
+import com.travel.common.entity.Result;
 import com.travel.entity.Users;
 import com.travel.web.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import static com.travel.common.content.AuthContent.*;
 
 /**
  * 用户表 控制层。
@@ -37,10 +40,10 @@ public class UsersController {
         // 3. 用户不存在，则进行注册
         if (user == null) {
             user = new Users();
-            user.setUsername("wx_" + openid.substring(0, 8))
-                .setPassword("123456")
-                .setNickName(userInfo != null ? userInfo.getNickName() : "微信用户")
-                .setAvatar("https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0");
+            user.setUsername(DEFAULT_USERNAME_PREFIX + openid.substring(0, 8))
+                .setPassword(SaSecureUtil.md5(DEFAULT_PASSWORD))
+                .setNickName(userInfo != null ? userInfo.getNickName() : DEFAULT_NICKNAME)
+                .setAvatar(DEFAULT_AVATAR);
             
             // 保存用户信息
             usersService.registerWxUser(user, openid);

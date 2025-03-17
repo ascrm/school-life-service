@@ -1,4 +1,4 @@
-package com.travel.entity;
+package com.travel.common.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
