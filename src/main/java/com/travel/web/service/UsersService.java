@@ -35,20 +35,4 @@ public interface UsersService extends IService<Users> {
      * @param openid 微信openid
      */
     void registerWxUser(Users user, String openid);
-
-    /**
-     * 生成用户登录token
-     *
-     * @param user 用户信息
-     * @return token字符串
-     */
-    String generateToken(Users user);
-
-    /**
-     * 根据token获取用户信息
-     *
-     * @param token 登录令牌
-     * @return 用户信息
-     */
-    Users getUserByToken(String token);
 }

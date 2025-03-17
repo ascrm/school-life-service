@@ -1,0 +1,14 @@
+singleServerConfig:
+  address: "redis://47.108.136.193:6379"
+  password: ascrm
+  database: 0
+  connectionPoolSize: 50 # 最大连接数
+  connectionMinimumIdleSize: 10 # 最小空闲连接数
+  connectTimeout: 10000 # 连接超时时间，单位毫秒
+  timeout: 3000 # 命令执行超时时间，单位毫秒
+  retryAttempts: 3 # 命令重试次数
+  retryInterval: 1500 # 命令重试间隔，单位毫秒
+threads: 0
+nettyThreads: 0
+codec:
+  class: "org.redisson.codec.JsonJacksonCodec"

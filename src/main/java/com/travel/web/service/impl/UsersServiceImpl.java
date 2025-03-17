@@ -5,9 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.travel.entity.Users;
 import com.travel.entity.UsersAuths;
+import com.travel.enums.IdentifyType;
 import com.travel.utils.RedisUtil;
+import com.travel.web.mapper.UsersAuthsMapper;
 import com.travel.web.mapper.UsersMapper;
-import com.travel.web.service.UsersAuthsService;
 import com.travel.web.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 /**
  * 用户表 服务层实现。
@@ -35,7 +35,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
     @Value("${wechat.secret}")
     private String secret;
 
-    private final UsersAuthsService usersAuthsService;
+    private final UsersAuthsMapper usersAuthsMapper;
 
     private final RedisUtil redisUtil;
 
@@ -61,10 +61,9 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
 
     @Override
     public Users getUserByOpenid(String openid) {
-        LambdaQueryWrapper<Users> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Users::getUsername, "wx_" + openid.substring(0, 8))
-                   .eq(Users::getIsDelete, 0);
-        return getOne(queryWrapper);
+        UsersAuths usersAuths = usersAuthsMapper.selectOne(new LambdaQueryWrapper<UsersAuths>()
+                .eq(UsersAuths::getIdentifier, openid));
+        return getById(usersAuths.getUserId());
     }
 
     @Override
@@ -72,33 +71,9 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         save(user);
         UsersAuths usersAuths = new UsersAuths();
         usersAuths.setUserId(user.getId())
-                  .setIdentityType("wx")
+                  .setIdentityType(IdentifyType.WX.getType())
                   .setIdentifier(openid)
                   .setCredential("");
-        usersAuthsService.save(usersAuths);
-    }
-
-    @Override
-    public String generateToken(Users user) {
-        String token = UUID.randomUUID().toString().replace("-", "");
-        redisUtil.setCacheObject(token, user.getId());
-        return token;
-    }
-
-    @Override
-    public Users getUserByToken(String token) {
-        if (token != null && token.startsWith("Bearer ")) {
-            token = token.substring(7); // 移除"Bearer "前缀
-        }
-        
-        // 从缓存中获取用户ID
-        Integer userId = redisUtil.getCacheObject(token);
-
-        if (userId != null) {
-            // 查询用户信息
-            return getById(userId);
-        }
-        
-        return null;
+        usersAuthsMapper.insert(usersAuths);
     }
 }
