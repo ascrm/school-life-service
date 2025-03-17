@@ -3,6 +3,7 @@ package com.travel.utils;
 import com.travel.common.entity.Result;
 import com.travel.common.properties.MinioProperty;
 import io.minio.*;
+import io.minio.http.Method;
 import io.minio.messages.Bucket;
 import jakarta.annotation.Resource;
 import lombok.SneakyThrows;
@@ -180,6 +181,7 @@ public class MinioUtils {
         return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
                 .bucket(bucketName)
                 .object(objectName)
+                .method(Method.GET)  // 显式指定 HTTP 方法
                 .expiry(expiryTime, TimeUnit.DAYS)
                 .build()
         );
