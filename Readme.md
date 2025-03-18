@@ -17,6 +17,7 @@ cd repository-name
 
 为了能够同步原始仓库的更新，需要添加一个指向原始仓库的远程仓库链接，通常命名为 `upstream`。
 
+本地feat一次提交
 ```
 git remote add upstream https://github.com/original-owner/repository-name.git
 ```
