@@ -56,7 +56,6 @@ minio:
   secretKey: ${minio.secretKey}
   bucketName: ${minio.bucketName}
 
-
 task:
   pool:
     core-size: 10          # 核心线程数
