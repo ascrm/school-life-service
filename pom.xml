@@ -8,11 +8,11 @@
         <version>3.4.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.travel</groupId>
-    <artifactId>cn-travel-api</artifactId>
+    <groupId>com.school</groupId>
+    <artifactId>cn-school-life-service-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>cn-travel-api</name>
-    <description>cn-travel-api</description>
+    <name>school-life-service-api</name>
+    <description>school-life-service</description>
     <url/>
     <licenses>
         <license/>

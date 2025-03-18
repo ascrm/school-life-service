@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.travel.web.mapper.CategoryMapper">
-    <resultMap id="BaseResultMap" type="com.travel.entity.Category">
+<mapper namespace="com.school.web.mapper.CategoryMapper">
+    <resultMap id="BaseResultMap" type="com.school.entity.Category">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="description" jdbcType="CLOB" property="description"/>

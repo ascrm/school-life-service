@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.travel.web.mapper.PostCategoryMapper">
-    <resultMap id="BaseResultMap" type="com.travel.entity.PostCategory">
+<mapper namespace="com.school.web.mapper.PostCategoryMapper">
+    <resultMap id="BaseResultMap" type="com.school.entity.PostCategory">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="post_id" jdbcType="INTEGER" property="postId"/>
         <result column="category_id" jdbcType="INTEGER" property="categoryId"/>
