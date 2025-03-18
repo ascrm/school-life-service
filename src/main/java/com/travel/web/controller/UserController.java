@@ -50,6 +50,7 @@ public class UserController {
         }
         // 4. 登录并生成token
         StpUtil.login(openid);
+
         return Result.success(StpUtil.getTokenValue());
     }
 }

@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.travel.entity.Category;
 import com.travel.entity.Post;
 import com.travel.entity.PostCategory;
+import com.travel.entity.Tag;
 import com.travel.utils.OpenAiUtil;
 import com.travel.web.service.CategoryService;
 import com.travel.web.service.PostCategoryService;
+import com.travel.web.service.TagService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -37,12 +39,14 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     private final OpenAiUtil openAiUtil;
 
+    private final TagService tagService;
+
     /**
      * 使用线程池异步执行AI分类任务
      * @param post 已保存的帖子
      */
     @Override
-    public void executeAiClassificationAsync(Post post) {
+    public void executeAiClassificationAsync(Post post,List<Integer> tagIds) {
         fixedThreadPool.submit(() -> {
             try {
                 // 1. 获取所有分类
@@ -55,24 +59,30 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                 // 2. 构建提示词，发送给OpenAI进行分析
                 StringBuilder promptBuilder = new StringBuilder();
 
-                promptBuilder.append("请根据帖子的标题或内容进行分类，");
+                promptBuilder.append("请根据帖子的标题、内容、标签进行分类\n");
                 if(post.getTitle()!=null) {
-                    promptBuilder.append("帖子的标题是：").append(post.getTitle()).append("。");
-                }else if(post.getContent()!=null) {
-                    promptBuilder.append("帖子的内容是：").append(post.getContent()).append("。");
-                }else{
-                    log.warn("post neither has a title nor content, cannot perform AI classification.");
-                    return;
+                    promptBuilder.append("帖子的标题是：").append(post.getTitle()).append("。\n");
                 }
+                if(post.getContent()!=null) {
+                    promptBuilder.append("帖子的内容是：").append(post.getContent()).append("。\n");
+                }
+                if(CollectionUtils.isNotEmpty(tagIds)){
+                    List<Tag> tags = tagService.listByIds(tagIds);
+                    List<String> tagNames = tags.stream().map(Tag::getName).toList();
+                    promptBuilder.append("帖子的标签是：");
+                    tagNames.forEach(tagName -> promptBuilder.append(tagName).append("，"));
+                    promptBuilder.append("\n");
+                }
+
                 promptBuilder.append("可选的分类有：");
                 // 将所有分类添加到提示词中
-                allCategories.forEach(category -> {
-                    promptBuilder.append(category.getId())
-                            .append(".")
-                            .append(category.getName())
-                            .append("  ");
-                });
-                promptBuilder.append(";请分析这篇帖子应该属于哪一个或多个分类，只返回分类的数字编号，多个分类用英文逗号分隔。");
+                allCategories.forEach(category -> promptBuilder.append(category.getId())
+                        .append(".")
+                        .append(category.getName())
+                        .append("  ")
+                );
+                promptBuilder.append("\n");
+                promptBuilder.append("请分析这篇帖子应该属于哪一个或多个分类，只返回分类的数字编号，多个分类用英文逗号分隔。");
                 log.info("提示词：{}", promptBuilder);
 
                 // 调用OpenAI API

@@ -69,8 +69,8 @@ public class PostController {
             imageService.saveBatch(list);
         }
         
-        // 使用线程池处理帖子分类任务
-        postService.executeAiClassificationAsync(post);
+        //使用线程池处理帖子分类任务
+        postService.executeAiClassificationAsync(post,postDto.getTagIds());
 
         return Result.success("发布成功");
     }
