@@ -2,16 +2,10 @@ package com.travel.web.controller;
 
 import com.travel.common.entity.Result;
 import com.travel.converter.PostConverter;
-import com.travel.entity.Image;
-import com.travel.entity.Post;
-import com.travel.entity.PostTag;
-import com.travel.entity.User;
+import com.travel.entity.*;
 import com.travel.entity.dto.PostDto;
 import com.travel.utils.UserHolder;
-import com.travel.web.service.ImageService;
-import com.travel.web.service.PostService;
-import com.travel.web.service.PostTagService;
-import com.travel.web.service.UserService;
+import com.travel.web.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -74,7 +68,18 @@ public class PostController {
             });
             imageService.saveBatch(list);
         }
+        
+        // 使用线程池处理帖子分类任务
+        postService.executeAiClassificationAsync(post);
 
         return Result.success("发布成功");
+    }
+
+    /**
+     * 根据分类查询帖子
+     */
+    @GetMapping("/posts/tag")
+    public Result<List<Post>> getPostsByCondition(String tag) {
+        return null;
     }
 } 

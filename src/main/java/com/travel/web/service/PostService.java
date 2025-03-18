@@ -11,4 +11,9 @@ import com.travel.entity.Post;
  */
 public interface PostService extends IService<Post> {
 
+    /**
+     * 使用线程池异步执行AI分类任务
+     * @param post 已保存的帖子
+     */
+    void executeAiClassificationAsync(Post post);
 } 

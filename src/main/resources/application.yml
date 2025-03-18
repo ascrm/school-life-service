@@ -6,6 +6,10 @@ spring:
     name: cn-travel-api
   profiles:
     active: dev
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 100MB
   datasource:
     driver-class-name: ${spring.datasource.driver-class-name}
     url: ${spring.datasource.driver-class-name}
@@ -17,6 +21,11 @@ spring:
       port: ${spring.data.redis.port}
       password: ${spring.data.redis.password}
       database: 0
+  ai:
+    openai:
+      api-key: ${spring.ai.openai.api-key}
+      base-url: ${spring.ai.openai.base-url}
+
 
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
@@ -46,3 +55,11 @@ minio:
   accessKey: ${minio.accessKey}
   secretKey: ${minio.secretKey}
   bucketName: ${minio.bucketName}
+
+
+task:
+  pool:
+    core-size: 10          # 核心线程数
+    max-size: 50           # 最大线程数
+    keep-alive: 60        # 空闲线程存活时间
+    queue-capacity: 100    # 任务队列容量
