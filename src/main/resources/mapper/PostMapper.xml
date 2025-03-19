@@ -15,4 +15,5 @@
         <result column="version" jdbcType="INTEGER" property="version"/>
         <result column="is_delete" jdbcType="TINYINT" property="isDelete"/>
     </resultMap>
+
 </mapper>
