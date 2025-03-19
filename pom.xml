@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.school</groupId>
-    <artifactId>cn-school-life-service-api</artifactId>
+    <artifactId>school-life-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>school-life-service-api</name>
     <description>school-life-service</description>
