@@ -18,4 +18,11 @@ public interface PostService extends IService<Post> {
      * @param post 已保存的帖子
      */
     void executeAiClassificationAsync(Post post, List<Integer> tagIds);
+    
+    /**
+     * 根据标签获取随机且较新的帖子
+     * @param tagId 标签id
+     * @return 帖子列表
+     */
+    List<Post> getRandomRecentPostsByTag(Integer tagId,String earliestDateTimeStr);
 } 
