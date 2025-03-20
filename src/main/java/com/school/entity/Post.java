@@ -48,6 +48,36 @@ public class Post {
     private String content;
 
     /**
+     * 点赞数量
+     */
+    @TableField(value = "likes", fill = FieldFill.INSERT)
+    private int likes;
+
+    /**
+     * 收藏数量
+     */
+    @TableField(value = "favourite",fill = FieldFill.INSERT)
+    private int favourite;
+
+    /**
+     * 评论数量
+     */
+    @TableField(value = "comments",fill = FieldFill.INSERT)
+    private int comments;
+
+    /**
+     * 地理位置信息
+     */
+    @TableField(value = "location")
+    private String location;
+
+    /**
+     * 额外备用字段
+     */
+    @TableField(value = "extra")
+    private String extra;
+
+    /**
      * 创建时间
      */
     @TableField(value = "created_at", fill = FieldFill.INSERT)

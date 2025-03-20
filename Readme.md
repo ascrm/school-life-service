@@ -7,7 +7,7 @@
 ```
 ## 2. 在本地新建分支
 
-![image](/assets/Readme/image.png)
+![image](/assets/Readme/image1.png)
 
 选择新建分支，分支命名的格式： feat-功能
 
@@ -21,32 +21,32 @@
 用 idea 推送的话 idea 会自动帮你将新分支推送到远程的同名分支上（如果远程没有与新分支同名的分支，git 会自动创建）
 
 ## 4. 将远程新分支的提交合并到 dev 上
-![image](/assets/Readme/image 2.png)
+![image](/assets/Readme/image2.png)
 
 1. 先左上角切换为新分支
 2. 然后点击右下角 Contribute，选择 Open Pull Request 发送合并请求
 3. 修改要合并到的分支为 dev，不要选 master
-   ![image](/assets/Readme/image 5.png)
+   ![image](/assets/Readme/image5.png)
 
    *注意*：如果右侧出现了 **Can’t automatically merge.** 需要手动解决一下冲突代码
 4. 然后点击右下角的 Create pull request 创建和并请求
 5. 如果存在冲突，则点击解决冲突手动解决一下冲突代码
-   ![image](/assets/Readme/image 6.png)
+   ![image](/assets/Readme/image6.png)
 
    至于如何手动解决冲突代码，自行上网搜索相关教程
 
 6. 解决完冲突后，会显示代码提交需要审核
 
-   ![image](/assets/Readme/image 7.png)
+   ![image](/assets/Readme/image7.png)
 
    在右侧边栏的顶部，自己邀请团队成员进行审核
 7. 等待审核完毕后即可合并代码
-   ![image](/assets/Readme/image 8.png)
+   ![image](/assets/Readme/image8.png)
 
    当然审核员也可以点击 **合并拉去请求**，进行合并
    
 8. 合并完成后，删除新分支
-   ![image](/assets/Readme/image 9.png)
+   ![image](/assets/Readme/image9.png)
 
    点击右侧的删除分支，删除新分支
 

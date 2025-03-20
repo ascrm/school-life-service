@@ -1,6 +1,7 @@
 package com.school.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.school.entity.Post;
 import com.school.utils.UserHolder;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,13 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.strictInsertFill(metaObject, "updatedBy", String.class, UserHolder.getLoginId());
         this.strictInsertFill(metaObject, "version", Integer.class, 1);
         this.strictInsertFill(metaObject, "isDelete", Integer.class,0);
+
+        //Post 默认值
+        if (metaObject.getOriginalObject() instanceof Post) {
+            this.strictInsertFill(metaObject, "likes", Integer.class, 0);
+            this.strictInsertFill(metaObject, "favourite", Integer.class, 0);
+            this.strictInsertFill(metaObject, "comments", Integer.class, 0);
+        }
     }
 
     @Override

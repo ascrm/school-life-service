@@ -85,7 +85,8 @@ public class PostController {
      * 根据分类查询帖子
      */
     @GetMapping("/posts/tag")
-    public Result<List<Post>> getPostsByCondition(String tag) {
-        return null;
+    public Result<List<Post>> getPostsByCondition(Integer tagId,String earliestDateTimeStr) {
+        List<Post> posts = postService.getRandomRecentPostsByTag(tagId,earliestDateTimeStr);
+        return Result.success(posts);
     }
 } 
