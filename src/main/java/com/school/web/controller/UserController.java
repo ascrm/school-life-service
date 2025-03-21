@@ -4,7 +4,9 @@ import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import com.school.common.content.AuthContent;
 import com.school.common.entity.Result;
+import com.school.converter.UserConverter;
 import com.school.entity.User;
+import com.school.entity.vo.AuthVo;
 import com.school.web.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +32,7 @@ public class UserController {
      * @return 登录结果，包含token和用户信息
      */
     @PostMapping("/user/wx/login")
-    public Result<String> wxLogin(@RequestParam String code,
+    public Result<AuthVo> wxLogin(@RequestParam String code,
                                   @RequestBody(required = false) User userInfo) {
         // 1. 通过code获取微信用户的openid和session_key
         String openid = userService.getWxOpenid(code);
@@ -50,6 +52,10 @@ public class UserController {
         // 4. 登录并生成token
         StpUtil.login(openid);
 
-        return Result.success(StpUtil.getTokenValue());
+        AuthVo authVo = new AuthVo();
+        authVo.setToken(StpUtil.getTokenValue())
+              .setUserVo(UserConverter.INSTANCE.entityToVo(user));
+
+        return Result.success(authVo);
     }
 }
