@@ -23,7 +23,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         //Post 默认值
         if (metaObject.getOriginalObject() instanceof Post) {
             this.strictInsertFill(metaObject, "likes", Integer.class, 0);
-            this.strictInsertFill(metaObject, "favourite", Integer.class, 0);
+            this.strictInsertFill(metaObject, "favorites", Integer.class, 0);
             this.strictInsertFill(metaObject, "comments", Integer.class, 0);
         }
     }
