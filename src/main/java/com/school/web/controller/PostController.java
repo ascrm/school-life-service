@@ -6,6 +6,7 @@ import com.school.converter.PostConverter;
 import com.school.converter.decorator.PostConverterDecorator;
 import com.school.entity.*;
 import com.school.entity.vo.PostVo;
+import com.school.enums.UserPostRelationTypeEnum;
 import com.school.web.service.*;
 import com.school.entity.dto.PostDto;
 import com.school.utils.UserHolder;
@@ -111,7 +112,7 @@ public class PostController {
             postService.update(Wrappers.lambdaUpdate(Post.class).eq(Post::getId, postId).setSql("likes=likes+1"));
             userPostRelation.setPostId(postId)
                     .setUserId(userAuth.getUserId())
-                    .setRelationType(1);
+                    .setRelationType(UserPostRelationTypeEnum.LIKE.getType());
             userPostRelationService.save(userPostRelation);
             return Result.success("点赞成功");
         }else{
