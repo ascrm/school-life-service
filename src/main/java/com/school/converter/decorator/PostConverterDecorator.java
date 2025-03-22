@@ -9,22 +9,23 @@ import com.school.entity.vo.PostVo;
 import com.school.entity.vo.UserVo;
 import com.school.web.service.UserService;
 import jakarta.annotation.Resource;
+import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @Author: ascrm
  * @Date: 2025/3/20
  */
+@Component
 public class PostConverterDecorator implements PostConverter {
 
-    private final PostConverter postConverter;
-    private final UserConverter userConverter;
+    @Resource(name = "postConverterImpl")
+    private PostConverter postConverter;
 
-    public PostConverterDecorator(PostConverter postConverter, UserConverter userConverter) {
-        this.postConverter = postConverter;
-        this.userConverter = userConverter;
-    }
+    @Resource(name = "userConverterImpl")
+    private UserConverter userConverter;
 
     @Resource
     private UserService userService;
@@ -45,11 +46,11 @@ public class PostConverterDecorator implements PostConverter {
 
     @Override
     public List<PostVo> entityToVo(List<Post> posts) {
-        List<PostVo> postVoList = postConverter.entityToVo(posts);
+        List<PostVo> list=new ArrayList<>();
         posts.forEach(post -> {
             PostVo postVo = this.entityToVo(post);
-            postVoList.add(postVo);
+            list.add(postVo);
         });
-        return postVoList;
+        return list;
     }
 }

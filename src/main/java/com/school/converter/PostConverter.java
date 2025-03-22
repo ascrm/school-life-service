@@ -15,8 +15,7 @@ import java.util.List;
  * @Author: ascrm
  * @Date: 2025/3/17
  */
-@Mapper
-@DecoratedWith(PostConverterDecorator.class)
+@Mapper(componentModel = "spring")
 public interface PostConverter {
     PostConverter INSTANCE = Mappers.getMapper(PostConverter.class);
 

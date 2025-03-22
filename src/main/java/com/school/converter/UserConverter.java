@@ -12,8 +12,7 @@ import org.mapstruct.factory.Mappers;
  * @Author: ascrm
  * @Date: 2025/3/20
  */
-@Mapper
-@DecoratedWith(UserConverterDecorator.class)
+@Mapper(componentModel = "spring")
 public interface UserConverter {
 
     UserConverter INSTANCE = Mappers.getMapper(UserConverter.class);
