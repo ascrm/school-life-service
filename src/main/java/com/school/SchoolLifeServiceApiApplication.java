@@ -9,6 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SchoolLifeServiceApiApplication {
     public static void main(String[] args) {
         SpringApplication.run(SchoolLifeServiceApiApplication.class, args);
-        log.info("😄😄😄cn-travel-api启动成功😄😄😄");
+        log.info("😄😄😄school-life-service-api启动成功😄😄😄");
     }
 }

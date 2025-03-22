@@ -54,6 +54,22 @@ public class User {
     private String avatar;
 
     /**
+     * 性别(0 未知/1男/2女)
+     */
+    @TableField(value = "gender")
+    private int gender;
+
+    /**
+     * 个人简介
+     */
+    private String brief;
+
+    /**
+     * 生日
+     */
+    private LocalDateTime birth;
+
+    /**
      * 电子邮件地址
      */
     @TableField(value = "email")
