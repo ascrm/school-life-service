@@ -1,19 +1,13 @@
 package com.school.web.controller;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.school.common.entity.Result;
 import com.school.converter.PostConverter;
-import com.school.converter.PostConverterImpl;
-import com.school.converter.UserConverterImpl;
 import com.school.converter.decorator.PostConverterDecorator;
-import com.school.entity.Image;
-import com.school.entity.Post;
-import com.school.entity.PostTag;
-import com.school.entity.User;
+import com.school.entity.*;
 import com.school.entity.vo.PostVo;
-import com.school.web.service.ImageService;
-import com.school.web.service.PostService;
-import com.school.web.service.PostTagService;
-import com.school.web.service.UserService;
+import com.school.enums.UserPostRelationTypeEnum;
+import com.school.web.service.*;
 import com.school.entity.dto.PostDto;
 import com.school.utils.UserHolder;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +40,10 @@ public class PostController {
     private final ImageService imageService;
 
     private final PostConverterDecorator postConverterDecorator;
+
+    private final UserPostRelationService userPostRelationService;
+
+    private final UserAuthService userAuthService;
 
     /**
      * 发布帖子
@@ -94,8 +92,35 @@ public class PostController {
     public Result<List<PostVo>> getPostsByCondition(@RequestParam Integer categoryId,
                                                     @RequestParam(required = false) String earliestDateTimeStr) {
         List<Post> postList = postService.getRandomRecentPostsByTag(categoryId, earliestDateTimeStr);
-//        PostConverterDecorator postConverterDecorator = new PostConverterDecorator(new PostConverterImpl(),new UserConverterImpl(),userService);
         List<PostVo> postVos = postConverterDecorator.entityToVo(postList);
         return Result.success(postVos);
+    }
+
+    /**
+     * 帖子点赞
+     */
+    @GetMapping("/post/like")
+    public Result<String> addLikePost(Integer postId) {
+
+        UserPostRelation userPostRelation = new UserPostRelation();
+        UserAuth userAuth = userAuthService.getOne(Wrappers.lambdaQuery(UserAuth.class).eq(UserAuth::getIdentifier, UserHolder.getLoginId()));
+        UserPostRelation relation = userPostRelationService.getOne(Wrappers.lambdaQuery(UserPostRelation.class)
+                .eq(UserPostRelation::getPostId, postId)
+                .eq(UserPostRelation::getUserId, userAuth.getUserId()));
+
+        if (relation == null) {
+            postService.update(Wrappers.lambdaUpdate(Post.class).eq(Post::getId, postId).setSql("likes=likes+1"));
+            userPostRelation.setPostId(postId)
+                    .setUserId(userAuth.getUserId())
+                    .setRelationType(UserPostRelationTypeEnum.LIKE.getType());
+            userPostRelationService.save(userPostRelation);
+            return Result.success("点赞成功");
+        }else{
+            postService.update(Wrappers.lambdaUpdate(Post.class).eq(Post::getId, postId).setSql("likes=likes-1"));
+            userPostRelationService.remove(Wrappers.lambdaQuery(UserPostRelation.class)
+                    .eq(UserPostRelation::getPostId, postId)
+                    .eq(UserPostRelation::getUserId,userAuth.getUserId()));
+            return Result.success("取消点赞成功");
+        }
     }
 } 

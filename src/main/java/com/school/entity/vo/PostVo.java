@@ -29,6 +29,7 @@ public class PostVo {
     private LocalDateTime createdAt;
     private String createdBy;
     private List<String> imageUrls;
+    private Boolean isLiked;
 
     private UserVo userVo;
 }
