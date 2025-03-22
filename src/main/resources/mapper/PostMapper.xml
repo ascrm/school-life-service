@@ -8,6 +8,11 @@
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="title" jdbcType="VARCHAR" property="title"/>
         <result column="content" jdbcType="CLOB" property="content"/>
+        <result column="likes" jdbcType="INTEGER" property="likes"/>
+        <result column="favorites" jdbcType="INTEGER" property="favorites"/>
+        <result column="comments" jdbcType="INTEGER" property="comments"/>
+        <result column="location" jdbcType="VARCHAR" property="location"/>
+        <result column="extra" jdbcType="VARCHAR" property="extra"/>
         <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
         <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
         <result column="created_by" jdbcType="INTEGER" property="createdBy"/>

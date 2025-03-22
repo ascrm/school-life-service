@@ -56,8 +56,8 @@ public class Post {
     /**
      * 收藏数量
      */
-    @TableField(value = "favourite",fill = FieldFill.INSERT)
-    private int favourite;
+    @TableField(value = "favorites",fill = FieldFill.INSERT)
+    private int favorites;
 
     /**
      * 评论数量
