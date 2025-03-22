@@ -33,11 +33,9 @@ public class Follow implements Serializable {
     @TableField(value = "updated_at", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updatedAt; // 更新时间
 
-    @Version
     @TableField("version")
     private Integer version; // 版本号（用于乐观锁）
 
-    @TableLogic
     @TableField("is_delete")
     private Boolean isDelete; // 逻辑删除（1表示已删除，0表示未删除）
 }
