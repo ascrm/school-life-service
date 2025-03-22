@@ -43,8 +43,6 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     private final TagService tagService;
 
-    private final PostTagService postTagService;
-
     /**
      * 使用线程池异步执行AI分类任务
      * @param post 已保存的帖子
@@ -149,18 +147,18 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     /**
      * 根据标签获取随机且较新的帖子
-     * @param tagId 标签id
+     * @param categoryId 标签id
      * @return 帖子列表
      */
     @Override
-    public List<Post> getRandomRecentPostsByTag(Integer tagId,String earliestDateTimeStr) {
+    public List<Post> getRandomRecentPostsByTag(Integer categoryId,String earliestDateTimeStr) {
         // 根据标签查询该分类下所有帖子id
-        List<PostTag> postTagList = postTagService.list(Wrappers.<PostTag>lambdaQuery()
-                .eq(PostTag::getTagId, tagId));
-        if(CollectionUtils.isEmpty(postTagList)) return null;
+        List<PostCategory> postCategoryList = postCategoryService.list(Wrappers.<PostCategory>lambdaQuery()
+                .eq(PostCategory::getCategoryId, categoryId));
+        if(CollectionUtils.isEmpty(postCategoryList)) return null;
 
         //初始化变量
-        List<Integer> postIds = postTagList.stream().map(PostTag::getPostId).toList();
+        List<Integer> postIds = postCategoryList.stream().map(PostCategory::getPostId).toList();
         List<Post> postList = new ArrayList<>();
         int minAfterDays = 0;
         int maxAfterDays = 30;
@@ -174,9 +172,6 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
         //根据帖子ids和其他条件查询帖子列表
         while(CollectionUtils.isEmpty(postList)){
-            //每次进入循环改变时间查询条件
-            maxAfterDays-=daysSection;
-
             //设置要查询的帖子的时间，应该在 actualAfterDays 天之前
             //比如 actualAfterDays 为10，那么就应该查询10天之前的帖子，包括前11，12，13天等等
             int actualAfterDays = RandomUtil.randomInt(minAfterDays, maxAfterDays);
@@ -187,9 +182,18 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                     .orderByDesc(Post::getCreatedAt)
             );
 
+            maxAfterDays-=daysSection;
             //假如我要查15天及之前发布的帖子，也就是2025年3月4号之前的帖子。但是2025年3月4号之前没有数据，
             // 则postList为空，进入下一次循环。那么减小时间范围，让得到的随机日期更小
-            if(maxAfterDays==0) break;
+
+            if(maxAfterDays==0) {
+                postList = list(Wrappers.<Post>lambdaQuery()
+                        .in(Post::getId, postIds)
+                        .le(Post::getCreatedAt, LocalDateTime.now())
+                        .orderByDesc(Post::getCreatedAt)
+                );
+                break;
+            }
         }
 
         // 如果查询结果为空，直接返回

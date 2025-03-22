@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.school.web.mapper.UserPostRelationMapper">
+    <resultMap id="BaseResultMap" type="com.school.entity.UserPostRelation">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="post_id" jdbcType="INTEGER" property="postId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="relation_type" jdbcType="INTEGER" property="relationType"/>
+        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+        <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
+        <result column="is_delete" jdbcType="TINYINT" property="isDelete"/>
+    </resultMap>
+
+</mapper>

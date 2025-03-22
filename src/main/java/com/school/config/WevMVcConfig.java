@@ -33,12 +33,14 @@ public class WevMVcConfig extends WebMvcConfigurationSupport {
         registry.addInterceptor(new SaInterceptor(handler -> {
         log.info("WevMVcConfig.addInterceptors.URL: {}", SaHolder.getRequest().getUrl());
             SaRouter
-                .match("/**")
-                .notMatch("/school/web/user/wx/login")
-                .check(r -> {
-                    StpUtil.checkLogin();
-                    UserHolder.set(AuthContent.USER_HOLDER_KEY, StpUtil.getLoginIdAsString());
-                });
+                    .match("/**")
+                    .notMatch("/school/web/user/wx/login")
+                    .notMatch("/school/web/categories")
+                    .notMatch("/school/web/posts/category")
+                    .check(r -> {
+                        StpUtil.checkLogin();
+                        UserHolder.set(AuthContent.USER_HOLDER_KEY, StpUtil.getLoginIdAsString());
+                    });
         })).addPathPatterns("/**");
     }
 

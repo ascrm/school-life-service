@@ -21,8 +21,8 @@ public interface PostService extends IService<Post> {
     
     /**
      * 根据标签获取随机且较新的帖子
-     * @param tagId 标签id
+     * @param categoryId 标签id
      * @return 帖子列表
      */
-    List<Post> getRandomRecentPostsByTag(Integer tagId,String earliestDateTimeStr);
+    List<Post> getRandomRecentPostsByTag(Integer categoryId,String earliestDateTimeStr);
 } 
