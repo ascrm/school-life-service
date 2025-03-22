@@ -1,12 +1,14 @@
 package com.school.converter.decorator;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.school.converter.PostConverter;
 import com.school.converter.UserConverter;
+import com.school.entity.Image;
 import com.school.entity.Post;
 import com.school.entity.User;
 import com.school.entity.dto.PostDto;
 import com.school.entity.vo.PostVo;
-import com.school.entity.vo.UserVo;
+import com.school.web.service.ImageService;
 import com.school.web.service.UserService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
@@ -30,6 +32,9 @@ public class PostConverterDecorator implements PostConverter {
     @Resource
     private UserService userService;
 
+    @Resource
+    private ImageService imageService;
+
     @Override
     public Post dtoToEntity(PostDto postDto) {
         return postConverter.dtoToEntity(postDto);
@@ -39,8 +44,10 @@ public class PostConverterDecorator implements PostConverter {
     public PostVo entityToVo(Post post) {
         PostVo postVo = postConverter.entityToVo(post);
         User user = userService.getById(post.getUserId());
-        UserVo userVo = userConverter.entityToVo(user);
-        postVo.setUserVo(userVo);
+        List<Image> imageList = imageService.list(Wrappers.<Image>lambdaQuery().eq(Image::getPostId, post.getId()));
+        List<String> imageUrls = imageList.stream().map(Image::getImageUrl).toList();
+        postVo.setUserVo(userConverter.entityToVo(user))
+                .setImageUrls(imageUrls);
         return postVo;
     }
 
