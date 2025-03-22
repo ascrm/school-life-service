@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.school.web.mapper.FollowMapper">
+
+    <select id="getMutualFollowIds" resultType="java.lang.Integer">
+        SELECT f1.followee_id
+        FROM tb_follow f1 INNER JOIN tb_follow f2
+        ON f1.followee_id = f2.follower_id
+        AND f1.follower_id = f2.followee_id
+        WHERE f1.follower_id = #{userId}
+        AND f1.is_delete = 0
+        AND f2.is_delete = 0;
+    </select>
+
+</mapper>
