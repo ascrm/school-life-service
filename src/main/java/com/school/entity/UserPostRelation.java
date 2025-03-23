@@ -11,23 +11,29 @@ import java.lang.Integer;
 import java.time.LocalDateTime;
 
 /**
- * 帖子信息表 实体类。
+ * 用户帖子关系表（点赞关系或收藏关系等） 实体类。
  *
  * @author ascrm
- * @since V1.0
+ * @since 1.0
  */
 @Accessors(chain = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName(value = "tb_post")
-public class Post {
+@TableName(value = "tb_user_post_relation")
+public class UserPostRelation {
 
     /**
-     * 帖子ID
+     * 收藏ID
      */
     @TableId(type = IdType.AUTO)
     private Integer id;
+
+    /**
+     * 帖子ID，外键关联Posts表
+     */
+    @TableField(value = "post_id")
+    private Integer postId;
 
     /**
      * 用户ID，外键关联Users表
@@ -36,46 +42,10 @@ public class Post {
     private Integer userId;
 
     /**
-     * 标题
+     * 1 点赞 2收藏
      */
-    @TableField(value = "title")
-    private String title;
-
-    /**
-     * 内容描述
-     */
-    @TableField(value = "content")
-    private String content;
-
-    /**
-     * 点赞数量
-     */
-    @TableField(value = "likes", fill = FieldFill.INSERT)
-    private int likes;
-
-    /**
-     * 收藏数量
-     */
-    @TableField(value = "favorites",fill = FieldFill.INSERT)
-    private int favorites;
-
-    /**
-     * 评论数量
-     */
-    @TableField(value = "comments",fill = FieldFill.INSERT)
-    private int comments;
-
-    /**
-     * 地理位置信息
-     */
-    @TableField(value = "location")
-    private String location;
-
-    /**
-     * 额外备用字段
-     */
-    @TableField(value = "extra")
-    private String extra;
+    @TableField(value = "relation_type")
+    private Integer relationType;
 
     /**
      * 创建时间
@@ -112,4 +82,4 @@ public class Post {
      */
     @TableField(value = "is_delete", fill = FieldFill.INSERT)
     private Integer isDelete;
-} 
+}
