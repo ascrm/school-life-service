@@ -1,7 +1,7 @@
 package com.school.web.controller;
 
 import com.school.common.entity.Result;
-import com.school.entity.vo.FollowVO;
+import com.school.entity.vo.FollowVo;
 import com.school.web.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class FollowController {
      * @return 关注的用户ID列表
      */
     @GetMapping("/follow/followees")
-    public Result<List<FollowVO>> getFolloweesList() {
+    public Result<List<FollowVo>> getFolloweesList() {
         return followService.getFollowList();
     }
 
@@ -32,7 +32,7 @@ public class FollowController {
      * @return 粉丝ID列表
      */
     @GetMapping("follow/fans")
-    public Result<List<FollowVO>> getFollowFansList() {
+    public Result<List<FollowVo>> getFollowFansList() {
         return followService.getFollowFansList();
     }
 
@@ -52,7 +52,7 @@ public class FollowController {
      * @return
      */
     @GetMapping("follow/mutual")
-    public Result<List<FollowVO>> getMutualList() {
+    public Result<List<FollowVo>> getMutualList() {
         return followService.getMutualFollows();
     }
 

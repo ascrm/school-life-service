@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.school.common.entity.Result;
 import com.school.entity.Message;
-import com.school.entity.vo.UnReadCount;
+import com.school.entity.vo.MessageVo;
 import com.school.web.mapper.ChatMessageMapper;
 import com.school.web.service.ChatMessageService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -44,12 +43,15 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, Messa
     }
 
     @Override
-    public Result<List<UnReadCount>> getUnReadCount(Integer userId) {
+    public Result<List<MessageVo>> getUnReadCount(Integer userId) {
 
         //当前用户作为接受者receiver
-        List<UnReadCount> list = chatMessageMapper.getUnReadCount(userId);
+        List<MessageVo> list = chatMessageMapper.getUnReadCount(userId);
         log.info("unreadCount: {}", list);
-
+        for (MessageVo messageVo : list) {
+            String latestMessage = chatMessageMapper.getLatestMessage(messageVo.getSenderId());
+            messageVo.setNewMessage(latestMessage);
+        }
         return Result.success(list);
     }
 }

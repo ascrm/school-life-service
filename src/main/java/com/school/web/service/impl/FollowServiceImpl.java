@@ -6,7 +6,7 @@ import com.school.common.entity.Result;
 import com.school.entity.Follow;
 import com.school.entity.User;
 import com.school.entity.UserAuth;
-import com.school.entity.vo.FollowVO;
+import com.school.entity.vo.FollowVo;
 import com.school.utils.UserHolder;
 import com.school.web.mapper.FollowMapper;
 import com.school.web.mapper.UserAuthMapper;
@@ -14,11 +14,8 @@ import com.school.web.mapper.UserMapper;
 import com.school.web.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,14 +42,14 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
      * @return
      */
     @Override
-    public Result<List<FollowVO>> getFollowList() {
+    public Result<List<FollowVo>> getFollowList() {
         //获取用户id
         Integer userId = getUserId();
 
         //获取关注的人的列表
         List<Integer> ids = followMapper.getFollowerIds(userId);
 
-        List<FollowVO> list = getUsersVo(ids);
+        List<FollowVo> list = getUsersVo(ids);
 
         //根据用户id查询关注列表
         return Result.success(list);
@@ -64,12 +61,12 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
      * @return
      */
     @Override
-    public Result<List<FollowVO>> getFollowFansList() {
+    public Result<List<FollowVo>> getFollowFansList() {
         Integer userId = getUserId();
         //获取粉丝列表
         List<Integer> ids = followMapper.getUserIds(userId);
 
-        List<FollowVO> list = getUsersVo(ids);
+        List<FollowVo> list = getUsersVo(ids);
         return Result.success(list);
     }
 
@@ -78,7 +75,7 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
      * @param ids
      * @return
      */
-    public List<FollowVO> getUsersVo(List<Integer> ids) {
+    public List<FollowVo> getUsersVo(List<Integer> ids) {
 
         if (ids == null || ids.isEmpty()) {
             return List.of();
@@ -86,8 +83,8 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
 
         List<User> users = userMapper.selectBatchIds(ids);
 
-        List<FollowVO> list = users.stream()
-                .map(user -> new FollowVO(user.getId(),user.getNickName(), user.getAvatar()))
+        List<FollowVo> list = users.stream()
+                .map(user -> new FollowVo(user.getId(),user.getNickName(), user.getAvatar()))
                 .collect(Collectors.toList());
 
         return list;
@@ -129,10 +126,10 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
      * @return
      */
     @Override
-    public Result<List<FollowVO>> getMutualFollows() {
+    public Result<List<FollowVo>> getMutualFollows() {
         Integer userId = getUserId();
         List<Integer> ids = followMapper.getMutualFollowIds(userId);
-        List<FollowVO> list = getUsersVo(ids);
+        List<FollowVo> list = getUsersVo(ids);
         return Result.success(list);
     }
 
