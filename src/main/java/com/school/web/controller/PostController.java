@@ -3,8 +3,10 @@ package com.school.web.controller;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.school.common.entity.Result;
 import com.school.converter.PostConverter;
+import com.school.converter.decorator.CommentConverterDecorator;
 import com.school.converter.decorator.PostConverterDecorator;
 import com.school.entity.*;
+import com.school.entity.vo.CommentVo;
 import com.school.entity.vo.PostVo;
 import com.school.enums.UserPostRelationTypeEnum;
 import com.school.web.service.*;
@@ -44,6 +46,10 @@ public class PostController {
     private final UserPostRelationService userPostRelationService;
 
     private final UserAuthService userAuthService;
+
+    private final CommentService commentService;
+
+    private final CommentConverterDecorator commentConverterDecorator;
 
     /**
      * 发布帖子
@@ -122,5 +128,19 @@ public class PostController {
                     .eq(UserPostRelation::getUserId,userAuth.getUserId()));
             return Result.success("取消点赞成功");
         }
+    }
+
+    /**
+     * 根据帖子id查询帖子详情
+     */
+    @GetMapping("/post/id")
+    public Result<PostVo> getPostById(Integer postId){
+        Post post = postService.getById(postId);
+
+        List<Comment> commentList = commentService.list(Wrappers.lambdaQuery(Comment.class).eq(Comment::getPostId, postId));
+        List<CommentVo> commentVos = commentConverterDecorator.entityToVo(commentList);
+        PostVo postVo = postConverterDecorator.entityToVo(post);
+        postVo.setCommentVos(commentVos);
+        return Result.success(postVo);
     }
 } 

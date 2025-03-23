@@ -82,6 +82,4 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(user == null) {
             return Result.fail("获取失败");
         }
-        return Result.success(user);
-    }
 }

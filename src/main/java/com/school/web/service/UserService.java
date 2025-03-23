@@ -38,4 +38,5 @@ public interface UserService extends IService<User> {
     void registerWxUser(User user, String openid);
 
     Result<User> getUserInfoById(Integer userId);
+
 }
