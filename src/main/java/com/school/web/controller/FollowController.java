@@ -74,4 +74,14 @@ public class FollowController {
         return followService.getFollowStatus(userId);
     }
 
+    /**
+     * 判断是否互关
+     * @param userId
+     * @param targetId
+     * @return
+     */
+    @GetMapping("follow/is_mutual")
+    public Result isMutual(@RequestParam Integer userId,@RequestParam Integer targetId){
+        return followService.isMutual(userId,targetId);
+    }
 }

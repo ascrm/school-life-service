@@ -25,4 +25,6 @@ public interface FollowService extends IService<Follow> {
     Result<Map<String, Integer>> getFollowCount();
 
     Result getFollowStatus(Integer userId);
+
+    Result isMutual(Integer userId, Integer targetId);
 }

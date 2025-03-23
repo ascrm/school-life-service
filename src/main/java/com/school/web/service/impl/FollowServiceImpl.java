@@ -166,6 +166,13 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
         return Result.success(flag>0?true:false);
     }
 
+    @Override
+    public Result isMutual(Integer userId, Integer targetId) {
+        Integer flag = followMapper.isMutual(userId,targetId);
+        //flag=2是互关
+        return Result.success(flag>1?true:false);
+    }
+
 
     /**
      * 判断之前是否关注过该用户
