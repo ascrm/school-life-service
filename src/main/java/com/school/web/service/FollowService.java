@@ -3,7 +3,7 @@ package com.school.web.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.school.common.entity.Result;
 import com.school.entity.Follow;
-import com.school.entity.vo.FollowVO;
+import com.school.entity.vo.FollowVo;
 
 import java.util.List;
 import java.util.Map;
@@ -13,16 +13,18 @@ import java.util.Map;
  *
  */
 public interface FollowService extends IService<Follow> {
-    Result<List<FollowVO>> getFollowList();
+    Result<List<FollowVo>> getFollowList();
 
-    Result<List<FollowVO>> getFollowFansList();
+    Result<List<FollowVo>> getFollowFansList();
 
 
     Result ChangeStatus(Integer followeeId);
 
-    Result<List<FollowVO>> getMutualFollows();
+    Result<List<FollowVo>> getMutualFollows();
 
     Result<Map<String, Integer>> getFollowCount();
 
     Result getFollowStatus(Integer userId);
+
+    Result isMutual(Integer userId, Integer targetId);
 }
