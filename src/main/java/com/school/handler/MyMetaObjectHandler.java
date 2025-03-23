@@ -1,6 +1,7 @@
 package com.school.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.school.entity.Comment;
 import com.school.entity.Post;
 import com.school.utils.UserHolder;
 import org.apache.ibatis.reflection.MetaObject;
@@ -25,6 +26,10 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
             this.strictInsertFill(metaObject, "likes", Integer.class, 0);
             this.strictInsertFill(metaObject, "favorites", Integer.class, 0);
             this.strictInsertFill(metaObject, "comments", Integer.class, 0);
+        }
+
+        if(metaObject.getOriginalObject() instanceof Comment){
+            this.strictInsertFill(metaObject, "likes", Integer.class, 0);
         }
     }
 
