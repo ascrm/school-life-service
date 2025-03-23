@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FollowVO {
+public class FollowVo {
 
     /**
      * 用户id
