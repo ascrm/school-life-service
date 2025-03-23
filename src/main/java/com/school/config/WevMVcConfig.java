@@ -37,7 +37,6 @@ public class WevMVcConfig extends WebMvcConfigurationSupport {
                     .notMatch("/school/web/user/wx/login")
                     .notMatch("/school/web/categories")
                     .notMatch("/school/web/posts/category")
-                    .notMatch("/school/web/post/like")
                     .notMatch("/school/web/post/id")
                     .check(r -> {
                         StpUtil.checkLogin();
