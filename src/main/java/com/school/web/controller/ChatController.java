@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/chat")
+@RequestMapping("/school/web")
 @RequiredArgsConstructor
 @Slf4j
 public class ChatController {
@@ -30,7 +30,7 @@ public class ChatController {
      *
      * @return 聊天记录
      */
-    @GetMapping("history")
+    @GetMapping("chat/history")
     public List<Message> getChatHistory(@RequestParam Integer userId, @RequestParam Integer receiverId) {
 
 
@@ -44,7 +44,7 @@ public class ChatController {
      * 获取未读的信息数
      * @return
      */
-    @GetMapping("/unread")
+    @GetMapping("chat/unread")
     public Result<List<UnReadCount>>getUnReadCount(@RequestParam Integer userId){
         return chatMessageService.getUnReadCount(userId);
     }
