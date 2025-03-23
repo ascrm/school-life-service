@@ -1,5 +1,6 @@
 package com.school.converter.decorator;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.school.converter.PostConverter;
 import com.school.converter.UserConverter;
@@ -7,10 +8,7 @@ import com.school.entity.*;
 import com.school.entity.dto.PostDto;
 import com.school.entity.vo.PostVo;
 import com.school.utils.UserHolder;
-import com.school.web.service.ImageService;
-import com.school.web.service.UserAuthService;
-import com.school.web.service.UserPostRelationService;
-import com.school.web.service.UserService;
+import com.school.web.service.*;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
@@ -42,6 +40,12 @@ public class PostConverterDecorator implements PostConverter {
     @Resource
     private UserAuthService userAuthService;
 
+    @Resource
+    private TagService tagService;
+
+    @Resource
+    private PostTagService postTagService;
+
     @Override
     public Post dtoToEntity(PostDto postDto) {
         return postConverter.dtoToEntity(postDto);
@@ -63,9 +67,18 @@ public class PostConverterDecorator implements PostConverter {
                     .eq(UserPostRelation::getPostId, post.getId()));
         }
 
+        List<PostTag> postTagList = postTagService.list(Wrappers.lambdaQuery(PostTag.class).eq(PostTag::getPostId, post.getId()));
+        List<String> tagNames=null;
+        if(CollectionUtils.isNotEmpty(postTagList)){
+            List<Integer> postTagIds = postTagList.stream().map(PostTag::getTagId).toList();
+            List<Tag> tags = tagService.listByIds(postTagIds);
+            tagNames = tags.stream().map(Tag::getName).toList();
+        }
+
         postVo.setUserVo(userConverter.entityToVo(user))
                 .setImageUrls(imageUrls)
-                .setIsLiked(relation != null);
+                .setIsLiked(relation != null)
+                .setTagNames(tagNames);
         return postVo;
     }
 

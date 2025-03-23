@@ -1,11 +1,6 @@
 package com.school.entity.vo;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.school.entity.Image;
-import com.school.entity.User;
+import com.school.entity.Tag;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -29,7 +24,9 @@ public class PostVo {
     private LocalDateTime createdAt;
     private String createdBy;
     private List<String> imageUrls;
-    private Boolean isLiked;
 
+    private Boolean isLiked;
+    private List<String> tagNames;
+    private List<CommentVo> commentVos;
     private UserVo userVo;
 }

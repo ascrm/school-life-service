@@ -1,16 +1,15 @@
 package com.school.web.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.school.entity.User;
+import com.school.entity.Comment;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 用户表 映射层。
+ * 评论表 映射层。
  *
  * @author ascrm
- * @since V1.0
+ * @since 1.0
  */
 @Mapper
-public interface UserMapper extends BaseMapper<User> {
-
+public interface CommentMapper extends BaseMapper<Comment> {
 }

@@ -7,7 +7,7 @@
 ```
 ## 2. 在本地新建分支
 
-![image](/assets/Readme/image1.png)
+![image](/assets/Readme/image.png)
 
 选择新建分支，分支命名的格式： feat-功能
 
