@@ -109,6 +109,7 @@ public class PostController {
     public Result<String> addLikePost(Integer postId) {
 
         UserPostRelation userPostRelation = new UserPostRelation();
+        UserHolder.getLoginId()
         UserAuth userAuth = userAuthService.getOne(Wrappers.lambdaQuery(UserAuth.class).eq(UserAuth::getIdentifier, UserHolder.getLoginId()));
         UserPostRelation relation = userPostRelationService.getOne(Wrappers.lambdaQuery(UserPostRelation.class)
                 .eq(UserPostRelation::getPostId, postId)
