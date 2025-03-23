@@ -2,6 +2,7 @@ package com.school.web.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.school.common.entity.Result;
 import com.school.entity.User;
 
 /**
@@ -35,4 +36,6 @@ public interface UserService extends IService<User> {
      * @param openid 微信openid
      */
     void registerWxUser(User user, String openid);
+
+    Result<User> getUserInfoById(Integer userId);
 }

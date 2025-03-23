@@ -67,4 +67,10 @@ public class UserController {
         userService.update(user, Wrappers.lambdaUpdate(User.class).eq(User::getId, user.getId()));
         return Result.success("更新成功");
     }
+
+
+    @GetMapping("/user")
+    public Result<User> getUserInfoById(@RequestParam Integer userId) {
+        return userService.getUserInfoById(userId);
+    }
 }
