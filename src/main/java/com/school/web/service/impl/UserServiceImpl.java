@@ -4,7 +4,6 @@ import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.school.common.entity.Result;
-import com.school.utils.UserHolder;
 import com.school.web.mapper.UserAuthMapper;
 import com.school.web.mapper.UserMapper;
 import com.school.entity.User;
@@ -77,15 +76,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userAuthMapper.insert(userAuth);
     }
 
-    /**
-     * 获取用户信息
-     * @return
-     */
     @Override
-    public Result<User> getUserInfo() {
-        //获取用户标识
-        String loginId = UserHolder.getLoginId();
-        User user = getUserByOpenid(loginId);
-        return Result.success(user);
-    }
+    public Result<User> getUserInfoById(Integer userId) {
+        User user = getById(userId);
+        if(user == null) {
+            return Result.fail("获取失败");
+        }
 }

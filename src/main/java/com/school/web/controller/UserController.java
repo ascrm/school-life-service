@@ -70,8 +70,7 @@ public class UserController {
 
 
     @GetMapping("/user")
-    public Result<User> getUserInfo(){
-        return userService.getUserInfo();
+    public Result<User> getUserInfoById(@RequestParam Integer userId) {
+        return userService.getUserInfoById(userId);
     }
-
 }

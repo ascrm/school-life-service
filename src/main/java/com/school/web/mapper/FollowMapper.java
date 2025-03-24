@@ -32,4 +32,7 @@ public interface FollowMapper extends BaseMapper<Follow> {
 
     @Select("select count(*) from tb_follow where follower_id=#{currentId} and followee_id=#{userId} and is_delete=0")
     Integer getFollowStatus(Integer currentId, Integer userId);
+
+
+    Integer isMutual(Integer userId, Integer targetId);
 }
