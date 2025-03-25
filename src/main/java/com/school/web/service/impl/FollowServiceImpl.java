@@ -1,6 +1,7 @@
 package com.school.web.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.school.common.entity.Result;
 import com.school.entity.Follow;
@@ -85,28 +86,24 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
     }
 
     /**
-     * 修改状态   关注/取消
+     * 修改状态关注/取消
      */
     @Override
-    public Result<String> ChangeStatus(Integer followeeId) {
+    public Boolean ChangeStatus(Integer followeeId) {
         Integer userId = getUserId();
 
         //判断是否有过关注该用户的记录
         Boolean flag = hasFollowBefore(userId, followeeId);
-
+        
         if (flag) {
-
-            //有过关注记录,接下来不管请求关注还是取消,is_delete取反就行
-            Integer rs = followMapper.change(userId, followeeId);
-            return rs > 0 ? Result.success("操作成功") : Result.fail("操作失败");
+            return followMapper.delete(Wrappers.<Follow>lambdaQuery()
+                    .eq(Follow::getFollowerId, userId)
+                    .eq(Follow::getFolloweeId, followeeId)) > 0;
+        }else{
+            Follow follow = new Follow();
+            follow.setFolloweeId(followeeId).setFollowerId(userId).setIsDelete(false);
+            return followMapper.insert(follow) > 0;
         }
-        //首次关注该用户
-        Follow follow = new Follow();
-        follow.setFolloweeId(followeeId);
-        follow.setFollowerId(userId);
-        follow.setIsDelete(false);
-
-        return followMapper.insert(follow) > 0 ? Result.success("关注成功") : Result.fail("关注失败");
     }
 
     /**
@@ -140,10 +137,12 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
      * 是否关注
      */
     @Override
-    public Boolean getFollowStatus(Integer userId) {
+    public Map<String, Boolean> getFollowStatus(Integer userId) {
         //获取当前用户id
         Integer currentId = getUserId();
-        return followMapper.getFollowStatus(currentId,userId) > 0;
+        Integer iFollowThem = followMapper.getFollowStatus(currentId, userId);
+        Integer theyFollowMe = followMapper.getFollowStatus(userId, currentId);
+        return Map.of("iFollowThem", iFollowThem > 0, "theyFollowMe", theyFollowMe > 0);
     }
 
 

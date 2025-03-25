@@ -38,8 +38,8 @@ public class FollowController {
      * 关注/取消关注某个用户
      */
     @PostMapping("follow/change")
-    public Result<String> followUser(@RequestParam Integer followeeId) {
-        return followService.ChangeStatus(followeeId);
+    public Result<Boolean> followUser(@RequestParam Integer followeeId) {
+        return Result.success(followService.ChangeStatus(followeeId));
     }
 
 
@@ -63,8 +63,8 @@ public class FollowController {
     /**
      * 点进帖子,判断是否关注
      */
-    @GetMapping("follow/status")
-    public Result<Boolean> getFollowStatus(@RequestParam Integer userId) {
+    @GetMapping("/follow/status")
+    public Result<Map<String, Boolean>> getFollowStatus(@RequestParam Integer userId) {
         return Result.success(followService.getFollowStatus(userId));
     }
 }
