@@ -1,8 +1,8 @@
 package com.school.web.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.school.common.entity.Result;
 import com.school.entity.Follow;
 import com.school.entity.User;
 import com.school.entity.UserAuth;
@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -39,41 +38,33 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
 
     /**
      * 返回关注列表
-     * @return
      */
     @Override
-    public Result<List<FollowVo>> getFollowList() {
+    public List<FollowVo> getFollowList() {
         //获取用户id
         Integer userId = getUserId();
 
         //获取关注的人的列表
         List<Integer> ids = followMapper.getFollowerIds(userId);
 
-        List<FollowVo> list = getUsersVo(ids);
-
-        //根据用户id查询关注列表
-        return Result.success(list);
+        return getUsersVo(ids);
     }
 
 
     /**
      * 返回粉丝列表
-     * @return
      */
     @Override
-    public Result<List<FollowVo>> getFollowFansList() {
+    public List<FollowVo> getFollowFansList() {
         Integer userId = getUserId();
         //获取粉丝列表
         List<Integer> ids = followMapper.getUserIds(userId);
 
-        List<FollowVo> list = getUsersVo(ids);
-        return Result.success(list);
+        return getUsersVo(ids);
     }
 
     /**
      * 封装用户VO返回
-     * @param ids
-     * @return
      */
     public List<FollowVo> getUsersVo(List<Integer> ids) {
 
@@ -82,22 +73,16 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
         }
 
         List<User> users = userMapper.selectBatchIds(ids);
-
-        List<FollowVo> list = users.stream()
+        return users.stream()
                 .map(user -> new FollowVo(user.getId(),user.getNickName(), user.getAvatar()))
                 .collect(Collectors.toList());
-
-        return list;
-
     }
 
     /**
      * 修改状态   关注/取消
-     * @param followeeId
-     * @return
      */
     @Override
-    public Result ChangeStatus(Integer followeeId) {
+    public Boolean ChangeStatus(Integer followeeId) {
 
         Integer userId = getUserId();
 
@@ -105,99 +90,69 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
         Boolean flag = hasFollowBefore(userId, followeeId);
 
         if (flag) {
-
-            //有过关注记录,接下来不管请求关注还是取消,is_delete取反就行
-            Integer rs = followMapper.change(userId, followeeId);
-
-            return rs > 0 ? Result.success("操作成功") : Result.fail("操作失败");
-
+            return remove(Wrappers.<Follow>lambdaQuery()
+                    .eq(Follow::getFollowerId, userId)
+                    .eq(Follow::getFolloweeId, followeeId));
+        }else{
+            Follow follow = new Follow();
+            follow.setFolloweeId(followeeId).setFollowerId(userId);
+            return save(follow);
         }
-        //首次关注该用户
-        Follow follow = new Follow();
-        follow.setFolloweeId(followeeId);
-        follow.setFollowerId(userId);
-        follow.setIsDelete(false);
-
-        return followMapper.insert(follow) > 0 ? Result.success("关注成功") : Result.fail("关注失败");
     }
 
     /**
      * 获取互相关注列表
-     * @return
      */
     @Override
-    public Result<List<FollowVo>> getMutualFollows() {
+    public List<FollowVo> getMutualFollows() {
         Integer userId = getUserId();
         List<Integer> ids = followMapper.getMutualFollowIds(userId);
-        List<FollowVo> list = getUsersVo(ids);
-        return Result.success(list);
+        return getUsersVo(ids);
     }
 
     /**
      * 获取关注数和粉丝数
-     * @return
      */
     @Override
-    public Result<Map<String, Integer>> getFollowCount() {
+    public Map<String, Integer> getFollowCount() {
         Integer userId = getUserId();
         Integer followCount = followMapper.countFollowees(userId);
         Integer fansCount = followMapper.countFollowers(userId);
 
-        Map<String, Integer> data = new HashMap<>();
-        data.put("followCount", followCount);
-        data.put("fansCount", fansCount);
-
-        return Result.success(data);
+        return Map.of("followCount", followCount, "fansCount", fansCount);
     }
 
     /**
      * 是否关注
-     * @param userId
-     * @return
      */
     @Override
-    public Result getFollowStatus(Integer userId) {
+    public Map<String, Boolean> getFollowStatus(Integer userId) {
         //获取当前用户id
         Integer currentId = getUserId();
-        Integer flag = followMapper.getFollowStatus(currentId,userId);
-        return Result.success(flag>0?true:false);
+        Integer iFollowThem = followMapper.getFollowStatus(currentId,userId);
+        Integer theyFollowMe = followMapper.getFollowStatus(currentId,userId);
+        return Map.of("iFollowThem", iFollowThem > 0, "theyFollowMe", theyFollowMe > 0);
     }
 
     @Override
-    public Result isMutual(Integer userId, Integer targetId) {
-        Integer flag = followMapper.isMutual(userId,targetId);
-        //flag=2是互关
-        return Result.success(flag>1?true:false);
+    public Boolean isMutual(Integer userId, Integer targetId) {
+        return followMapper.isMutual(userId,targetId)>1;
     }
-
 
     /**
      * 判断之前是否关注过该用户
-     * @param userId,followeeId
-     * @return
      */
     private Boolean hasFollowBefore(Integer userId,Integer followeeId) {
-
-        Integer flag = followMapper.hasFollowBefore(userId, followeeId);
-
-        return flag > 0 ? true : false;
+        return followMapper.hasFollowBefore(userId, followeeId)>0;
     }
-
 
     /**
      * 获取用户id
-     * @return
      */
     private Integer getUserId() {
-
         //获取标识
         String loginId = UserHolder.getLoginId();
-
-        //获取用户id
         UserAuth userAuth = userAuthMapper.selectOne(new LambdaQueryWrapper<UserAuth>().eq(UserAuth::getIdentifier, loginId));
-
         return userAuth != null ? userAuth.getUserId() : null;
     }
-
-
 }
