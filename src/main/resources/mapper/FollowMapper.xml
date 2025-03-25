@@ -22,5 +22,12 @@
         AND f1.is_delete = 0
         AND f2.is_delete = 0;
     </select>
+    <select id="isMutual" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM tb_follow
+        WHERE ((follower_id = #{userId} AND followee_id = #{targetId})
+            OR (follower_id = #{targetId} AND followee_id = #{userId}))
+          AND is_delete = 0;
+    </select>
 
 </mapper>

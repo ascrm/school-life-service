@@ -17,11 +17,14 @@ public interface FollowService extends IService<Follow> {
 
     Result<List<FollowVo>> getFollowFansList();
 
-    Boolean ChangeStatus(Integer followeeId);
+
+    Result ChangeStatus(Integer followeeId);
 
     Result<List<FollowVo>> getMutualFollows();
 
     Result<Map<String, Integer>> getFollowCount();
 
-    Map<String, Boolean> getFollowStatus(Integer userId);
+    Result getFollowStatus(Integer userId);
+
+    Result isMutual(Integer userId, Integer targetId);
 }
