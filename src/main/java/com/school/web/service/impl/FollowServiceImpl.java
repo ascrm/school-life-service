@@ -39,7 +39,6 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
 
     /**
      * 返回关注列表
-     * @return
      */
     @Override
     public Result<List<FollowVo>> getFollowList() {
@@ -58,7 +57,6 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
 
     /**
      * 返回粉丝列表
-     * @return
      */
     @Override
     public Result<List<FollowVo>> getFollowFansList() {
@@ -72,8 +70,6 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
 
     /**
      * 封装用户VO返回
-     * @param ids
-     * @return
      */
     public List<FollowVo> getUsersVo(List<Integer> ids) {
 
@@ -83,22 +79,16 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
 
         List<User> users = userMapper.selectBatchIds(ids);
 
-        List<FollowVo> list = users.stream()
+        return users.stream()
                 .map(user -> new FollowVo(user.getId(),user.getNickName(), user.getAvatar()))
                 .collect(Collectors.toList());
-
-        return list;
-
     }
 
     /**
      * 修改状态   关注/取消
-     * @param followeeId
-     * @return
      */
     @Override
-    public Result ChangeStatus(Integer followeeId) {
-
+    public Result<String> ChangeStatus(Integer followeeId) {
         Integer userId = getUserId();
 
         //判断是否有过关注该用户的记录
@@ -108,9 +98,7 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
 
             //有过关注记录,接下来不管请求关注还是取消,is_delete取反就行
             Integer rs = followMapper.change(userId, followeeId);
-
             return rs > 0 ? Result.success("操作成功") : Result.fail("操作失败");
-
         }
         //首次关注该用户
         Follow follow = new Follow();
@@ -123,7 +111,6 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
 
     /**
      * 获取互相关注列表
-     * @return
      */
     @Override
     public Result<List<FollowVo>> getMutualFollows() {
@@ -135,7 +122,6 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
 
     /**
      * 获取关注数和粉丝数
-     * @return
      */
     @Override
     public Result<Map<String, Integer>> getFollowCount() {
@@ -152,45 +138,32 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
 
     /**
      * 是否关注
-     * @param userId
-     * @return
      */
     @Override
-    public Result getFollowStatus(Integer userId) {
+    public Boolean getFollowStatus(Integer userId) {
         //获取当前用户id
         Integer currentId = getUserId();
-        Integer flag = followMapper.getFollowStatus(currentId,userId);
-        return Result.success(flag>0?true:false);
+        return followMapper.getFollowStatus(currentId,userId) > 0;
     }
 
 
     /**
      * 判断之前是否关注过该用户
-     * @param userId,followeeId
-     * @return
      */
     private Boolean hasFollowBefore(Integer userId,Integer followeeId) {
-
-        Integer flag = followMapper.hasFollowBefore(userId, followeeId);
-
-        return flag > 0 ? true : false;
+        return followMapper.hasFollowBefore(userId, followeeId) > 0;
     }
 
 
     /**
      * 获取用户id
-     * @return
      */
     private Integer getUserId() {
-
         //获取标识
         String loginId = UserHolder.getLoginId();
 
         //获取用户id
         UserAuth userAuth = userAuthMapper.selectOne(new LambdaQueryWrapper<UserAuth>().eq(UserAuth::getIdentifier, loginId));
-
         return userAuth != null ? userAuth.getUserId() : null;
     }
-
-
 }
