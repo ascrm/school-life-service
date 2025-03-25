@@ -21,26 +21,18 @@ public class ChatMessageController {
 
     /**
      * 获取两个用户之间的聊天记录（按时间排序）
-     * @param userId 用户 ID
-     * @param receiverId 好友 ID
      * 从查询角度来看,userId此时对应字段是的是receiver_id,而receiverId对应sender_id
-     *
-     * @return 聊天记录
      */
-    @GetMapping("chat/history")
-    public List<ChatMessage> getChatHistory(@RequestParam Integer userId, @RequestParam Integer receiverId) {
-
-        return chatMessageService.getChatHistory(userId,receiverId);
-
+    @GetMapping("/chat/history")
+    public Result<List<ChatMessage>> getChatHistory(@RequestParam Integer userId, @RequestParam Integer receiverId) {
+        return Result.success(chatMessageService.getChatHistory(userId,receiverId));
     }
-
 
     /**
      * 获取未读的信息数
      */
-    @GetMapping("chat/unread")
+    @GetMapping("/chat/unread")
     public Result<List<MessageVo>>getUnReadCount(@RequestParam Integer userId){
         return chatMessageService.getUnReadCount(userId);
     }
-
 }

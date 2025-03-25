@@ -25,7 +25,6 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
         log.info("查询聊天记录: 用户 {} <-> {}", userId, receiverId);
 
         //此时是点进聊天框了,将数据库对应的未读信息更新为已读
-
         //获取用户之间未读消息
         List<Integer> ids = chatMessageMapper.getUnReadMessage(userId,receiverId);
 
