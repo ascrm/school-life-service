@@ -1,6 +1,6 @@
 package com.school.config;
 
-import com.school.handler.ChatMessageHandler;
+import com.school.handler.WebsocketChatHandler;
 import com.school.web.mapper.ChatMessageMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +25,6 @@ public class WebSocketConfig {
 
     @PostConstruct
     public void init() {
-        ChatMessageHandler.setChatMessageMapper(chatMessageMapper);
+        WebsocketChatHandler.setChatMessageMapper(chatMessageMapper);
     }
 }

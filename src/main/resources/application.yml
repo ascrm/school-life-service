@@ -15,6 +15,19 @@ spring:
     url: ${spring.datasource.driver-class-name}
     username: ${spring.datasource.username}
     password: ${spring.datasource.password}
+    hikari:
+      initialization-fail-timeout: 1    # 缩短初始化超时时间
+      auto-commit: true
+      minimum-idle: 5                   # 最小空闲连接数
+      maximum-pool-size: 10             # 最大连接数
+      idle-timeout: 30000            # 空闲连接存活最大时间，默认600000（10分钟）
+      pool-name: HikariCP
+      max-lifetime: 1800000          # 连接的生命时长，超时而且没被使用则被释放（retired），默认:30分钟
+      connection-timeout: 30000      # 等待连接池分配连接的最大时长（毫秒）
+      connection-test-query: SELECT 1 # 连接测试查询
+      connection-init-sql: SELECT 1     # 连接初始化时执行的SQL
+      warm-up-enabled: ${spring.datasource.hikari.warm-up-enabled}  # 开发环境开启，生产环境可以关闭
+
   data:
     redis:
       host: ${spring.data.redis.host}
@@ -62,3 +75,7 @@ task:
     max-size: 50           # 最大线程数
     keep-alive: 60         # 空闲线程存活时间
     queue-capacity: 100    # 任务队列容量
+
+logging:
+  level:
+    com.school.web.mapper: INFO  # 将mapper包的日志级别设置为INFO

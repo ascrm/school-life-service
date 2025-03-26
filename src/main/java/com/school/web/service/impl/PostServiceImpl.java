@@ -5,7 +5,10 @@ import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.school.entity.*;
+import com.school.web.mapper.CategoryMapper;
+import com.school.web.mapper.PostCategoryMapper;
 import com.school.web.mapper.PostMapper;
+import com.school.web.mapper.TagMapper;
 import com.school.web.service.*;
 import com.school.utils.OpenAiUtil;
 import lombok.RequiredArgsConstructor;
@@ -35,13 +38,13 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     private final ExecutorService fixedThreadPool;
 
-    private final CategoryService categoryService;
+    private final CategoryMapper categoryMapper;
 
-    private final PostCategoryService postCategoryService;
+    private final PostCategoryMapper postCategoryMapper;
 
     private final OpenAiUtil openAiUtil;
 
-    private final TagService tagService;
+    private final TagMapper tagMapper;
 
     /**
      * 使用线程池异步执行AI分类任务
@@ -52,7 +55,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         fixedThreadPool.submit(() -> {
             try {
                 // 1. 获取所有分类
-                List<Category> allCategories = categoryService.list();
+                List<Category> allCategories = categoryMapper.selectList(Wrappers.lambdaQuery(Category.class));
                 if (CollectionUtils.isEmpty(allCategories)) {
                     log.warn("没有找到任何分类，无法进行AI分类");
                     return;
@@ -69,7 +72,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                     promptBuilder.append("帖子的内容是：").append(post.getContent()).append("。\n");
                 }
                 if(CollectionUtils.isNotEmpty(tagIds)){
-                    List<Tag> tags = tagService.listByIds(tagIds);
+                    List<Tag> tags = tagMapper.selectByIds(tagIds);
                     List<String> tagNames = tags.stream().map(Tag::getName).toList();
                     promptBuilder.append("帖子的标签是：");
                     tagNames.forEach(tagName -> promptBuilder.append(tagName).append("，"));
@@ -107,7 +110,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                 });
 
                 if (!postCategories.isEmpty()) {
-                    postCategoryService.saveBatch(postCategories);
+                    postCategoryMapper.insert(postCategories);
                     log.info("帖子ID: {}，成功分配了{}个分类", post.getId(), postCategories.size());
                 }
             } catch (Exception e) {
@@ -153,8 +156,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     @Override
     public List<Post> getRandomRecentPostsByTag(Integer categoryId,String earliestDateTimeStr) {
         // 根据标签查询该分类下所有帖子id
-        List<PostCategory> postCategoryList = postCategoryService.list(Wrappers.<PostCategory>lambdaQuery()
-                .eq(PostCategory::getCategoryId, categoryId));
+        List<PostCategory> postCategoryList = postCategoryMapper.selectList(Wrappers.<PostCategory>lambdaQuery()
+                .eq(PostCategory::getCategoryId, categoryId)
+                .select(PostCategory::getPostId));
         if(CollectionUtils.isEmpty(postCategoryList)) return null;
 
         //初始化变量

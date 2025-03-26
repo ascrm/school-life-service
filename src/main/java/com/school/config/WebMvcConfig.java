@@ -24,14 +24,14 @@ import java.util.List;
 
 @Configuration
 @Slf4j
-public class WevMVcConfig extends WebMvcConfigurationSupport {
+public class WebMvcConfig extends WebMvcConfigurationSupport {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
         // 注册 Sa-Token 拦截器，定义详细认证规则
         registry.addInterceptor(new SaInterceptor(handler -> {
-        log.info("WevMVcConfig.addInterceptors.URL: {}", SaHolder.getRequest().getUrl());
+        log.info("WebMvcConfig.addInterceptors.URL: {}", SaHolder.getRequest().getUrl());
             SaRouter
                     .match("/**")
                     .notMatch("/school/web/user/wx/login")

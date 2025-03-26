@@ -72,7 +72,7 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
             return List.of();
         }
 
-        List<User> users = userMapper.selectBatchIds(ids);
+        List<User> users = userMapper.selectByIds(ids);
         return users.stream()
                 .map(user -> new FollowVo(user.getId(),user.getNickName(), user.getAvatar()))
                 .collect(Collectors.toList());

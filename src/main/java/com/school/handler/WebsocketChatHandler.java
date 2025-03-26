@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @ServerEndpoint("/chat/{userId}")
 @Slf4j
-public class ChatMessageHandler {
+public class WebsocketChatHandler {
 
     // 静态注入依赖
     @Setter
