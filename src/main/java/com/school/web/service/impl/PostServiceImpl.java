@@ -156,13 +156,10 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     @Override
     public List<Post> getRandomRecentPostsByTag(Integer categoryId,String earliestDateTimeStr) {
         // 根据标签查询该分类下所有帖子id
-        List<PostCategory> postCategoryList = postCategoryMapper.selectList(Wrappers.<PostCategory>lambdaQuery()
-                .eq(PostCategory::getCategoryId, categoryId)
-                .select(PostCategory::getPostId));
-        if(CollectionUtils.isEmpty(postCategoryList)) return null;
+        List<Integer> postIds = postCategoryMapper.getPostIdsByCategoryId(categoryId);
+        if(CollectionUtils.isEmpty(postIds)) return null;
 
         //初始化变量
-        List<Integer> postIds = postCategoryList.stream().map(PostCategory::getPostId).toList();
         List<Post> postList = new ArrayList<>();
         int minAfterDays = 0;
         int maxAfterDays = 30;

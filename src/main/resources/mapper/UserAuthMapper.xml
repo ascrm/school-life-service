@@ -10,7 +10,6 @@
         <result column="identifier" jdbcType="VARCHAR" property="identifier"/>
         <result column="credential" jdbcType="VARCHAR" property="credential"/>
         <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
-        <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
         <result column="version" jdbcType="OTHER" property="version"/>
         <result column="is_delete" jdbcType="OTHER" property="isDelete"/>
     </resultMap>

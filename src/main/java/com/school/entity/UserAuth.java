@@ -60,12 +60,6 @@ public class UserAuth implements Serializable {
     private LocalDateTime createdAt;
 
     /**
-     * 更新时间，自动填充
-     */
-    @TableField(value = "updated_at", fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updatedAt;
-
-    /**
      * 版本号，乐观锁注解
      */
     @Version
