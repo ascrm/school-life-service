@@ -3,7 +3,7 @@ package com.school.web.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.school.common.entity.Result;
-import com.school.entity.Message;
+import com.school.entity.ChatMessage;
 import com.school.entity.vo.MessageVo;
 import com.school.web.mapper.ChatMessageMapper;
 import com.school.web.service.ChatMessageService;
@@ -16,16 +16,15 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, Message>implements ChatMessageService {
+public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatMessage>implements ChatMessageService {
 
     private final ChatMessageMapper chatMessageMapper;
 
     @Override
-    public List<Message> getChatHistory(Integer userId, Integer receiverId) {
+    public List<ChatMessage> getChatHistory(Integer userId, Integer receiverId) {
         log.info("查询聊天记录: 用户 {} <-> {}", userId, receiverId);
 
         //此时是点进聊天框了,将数据库对应的未读信息更新为已读
-
         //获取用户之间未读消息
         List<Integer> ids = chatMessageMapper.getUnReadMessage(userId,receiverId);
 
@@ -33,12 +32,12 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, Messa
             chatMessageMapper.updateMessage(id);
         }
 
-        return chatMessageMapper.selectList(new LambdaQueryWrapper<Message>()
+        return chatMessageMapper.selectList(new LambdaQueryWrapper<ChatMessage>()
                 .and(wrapper -> wrapper
-                        .eq(Message::getSenderId, userId).eq(Message::getReceiverId, receiverId)
+                        .eq(ChatMessage::getSenderId, userId).eq(ChatMessage::getReceiverId, receiverId)
                         .or()
-                        .eq(Message::getSenderId, receiverId).eq(Message::getReceiverId, userId))
-                .orderByAsc(Message::getCreatedAt)
+                        .eq(ChatMessage::getSenderId, receiverId).eq(ChatMessage::getReceiverId, userId))
+                .orderByAsc(ChatMessage::getCreatedAt)
         );
     }
 

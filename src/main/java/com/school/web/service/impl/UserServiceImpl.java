@@ -79,7 +79,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public Result<User> getUserInfoById(Integer userId) {
         User user = getById(userId);
-        if(user == null) {
+        if (user == null) {
             return Result.fail("获取失败");
         }
+        return Result.success(user);
+    }
 }

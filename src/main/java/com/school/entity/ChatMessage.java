@@ -6,8 +6,8 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-@TableName("tb_message")
-public class Message {
+@TableName("tb_chat_message")
+public class ChatMessage {
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;

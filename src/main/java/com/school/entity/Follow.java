@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @TableName("tb_follow") // 指定表名
 public class Follow implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @TableId(type = IdType.AUTO) // 主键自增
