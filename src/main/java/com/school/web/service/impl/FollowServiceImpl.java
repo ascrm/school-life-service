@@ -130,7 +130,7 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
         //获取当前用户id
         Integer currentId = getUserId();
         Integer iFollowThem = followMapper.getFollowStatus(currentId,userId);
-        Integer theyFollowMe = followMapper.getFollowStatus(currentId,userId);
+        Integer theyFollowMe = followMapper.getFollowStatus(userId,currentId);
         return Map.of("iFollowThem", iFollowThem > 0, "theyFollowMe", theyFollowMe > 0);
     }
 
