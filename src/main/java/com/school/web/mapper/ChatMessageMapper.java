@@ -20,7 +20,6 @@ public interface ChatMessageMapper extends BaseMapper<ChatMessage> {
     @Update("update tb_chat_message set status = 2 where id=#{id}")
     void updateMessage(Integer id);
 
-
     @Select("select id from tb_chat_message where receiver_id=#{userId} and sender_id=#{receiverId} and status=0")
     List<Integer> getUnReadMessage(Integer userId, Integer receiverId);
 
@@ -31,7 +30,7 @@ public interface ChatMessageMapper extends BaseMapper<ChatMessage> {
     @Select("select content from tb_chat_message where sender_id=#{senderId} and status=0 order by created_at desc limit 1")
     String getLatestMessage(Integer senderId);
 
-//    // 查询聊天历史记录（聊天窗口加载时调用）
+    // 查询聊天历史记录（聊天窗口加载时调用）
 //    @Select("SELECT * FROM tb_chat_message WHERE (from_user_id = #{userId1} AND to_user_id = #{userId2}) OR (from_user_id = #{userId2} AND to_user_id = #{userId1}) ORDER BY timestamp ASC")
 //    List<ChatMessage> getChatHistory(Integer userId1, Integer userId2);
 }

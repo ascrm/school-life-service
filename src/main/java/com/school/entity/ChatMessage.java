@@ -22,10 +22,10 @@ public class ChatMessage {
     private String content;
 
     @TableField("type")
-    private Integer type; // 1文本 2图片 3视频 4文件
+    private Integer type; // 1 文本 2 图片 3 视频 4 文件
 
     @TableField("status")
-    private Integer status; // 1未送达 2已送达 3未读
+    private Integer status; // 1未读 2已读
 
     @TableField(value = "created_at",fill = FieldFill.INSERT)
     private LocalDateTime createdAt;
