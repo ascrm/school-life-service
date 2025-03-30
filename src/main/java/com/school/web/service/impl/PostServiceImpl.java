@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
+import static com.school.common.content.OpenAiContent.AI_SYSTEM_ROLE;
 import static com.school.common.content.TimeFormatterContent.DEFAULT_DATE_FORMAT;
 
 /**
@@ -91,7 +92,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                 log.info("提示词：{}", promptBuilder);
 
                 // 调用OpenAI API
-                String aiResponse = openAiUtil.generation(promptBuilder.toString());
+                String aiResponse = openAiUtil.generation(AI_SYSTEM_ROLE,promptBuilder.toString());
                 log.info("AI分类结果: {}", aiResponse);
 
                 // 3. 解析AI返回的分类编号

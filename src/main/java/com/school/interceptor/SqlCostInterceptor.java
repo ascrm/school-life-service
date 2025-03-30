@@ -28,7 +28,7 @@ public class SqlCostInterceptor implements Interceptor {
             long costTime = endTime - startTime;
             BoundSql boundSql = statementHandler.getBoundSql();
             String sql = boundSql.getSql();
-            log.info("SQL执行时间: {}ms, SQL语句: {}", costTime, sql.replaceAll("\\s+", " "));
+            log.info("SQL执行时间: {}ms, SQL语句: {}\n", costTime, sql.replaceAll("\\s+", " "));
         }
     }
 

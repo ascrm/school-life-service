@@ -16,6 +16,6 @@ import java.util.List;
 @Mapper
 public interface PostCategoryMapper extends BaseMapper<PostCategory> {
 
-    @Select("select post_id from tb_post_category where category_id = #{categoryId}")
+    @Select("select tb_post_category.post_id from tb_post_category where category_id = #{categoryId}")
     List<Integer> getPostIdsByCategoryId(Integer categoryId);
 }

@@ -27,7 +27,6 @@ spring:
       connection-test-query: SELECT 1 # 连接测试查询
       connection-init-sql: SELECT 1     # 连接初始化时执行的SQL
       warm-up-enabled: ${spring.datasource.hikari.warm-up-enabled}  # 开发环境开启，生产环境可以关闭
-
   data:
     redis:
       host: ${spring.data.redis.host}
@@ -38,7 +37,6 @@ spring:
     openai:
       api-key: ${spring.ai.openai.api-key}
       base-url: ${spring.ai.openai.base-url}
-
 
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
@@ -79,3 +77,4 @@ task:
 logging:
   level:
     com.school.web.mapper: INFO  # 将mapper包的日志级别设置为INFO
+debug: true

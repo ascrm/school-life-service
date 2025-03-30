@@ -1,27 +1,25 @@
 package com.school.utils;
 
+import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Component;
-
-import static com.school.common.content.OpenAiContent.AI_SYSTEM_ROLE;
 
 /**
  * @Author: ascrm
  * @Date: 2025/3/18
  */
 @Component
+@Slf4j
 public class OpenAiUtil {
 
-    private final ChatClient chatClient;
+    @Resource
+    private ChatClient chatClient;
 
-    public OpenAiUtil(ChatClient.Builder chatClientBuilder) {
-        this.chatClient = chatClientBuilder.build();
-    }
-
-    public String generation(String message) {
-        return this.chatClient.prompt()
+    public String generation(String aiRole,String message) {
+        return chatClient.prompt()
                 .user(message)
-                .system(AI_SYSTEM_ROLE)
+                .system(aiRole)
                 .call()
                 .content();
     }
