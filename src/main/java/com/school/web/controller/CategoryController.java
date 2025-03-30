@@ -1,6 +1,5 @@
 package com.school.web.controller;
 
-import com.alibaba.fastjson2.JSON;
 import com.school.common.entity.Result;
 import com.school.entity.Category;
 import lombok.RequiredArgsConstructor;
