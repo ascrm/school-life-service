@@ -77,4 +77,3 @@ task:
 logging:
   level:
     com.school.web.mapper: INFO  # 将mapper包的日志级别设置为INFO
-debug: true

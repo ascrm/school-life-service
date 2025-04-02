@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@ConfigurationProperties(prefix = "sql-index-check")
+@ConfigurationProperties(prefix = "sql.index.check")
 public class SqlIndexCheckProperties {
 
     private boolean enabled;
